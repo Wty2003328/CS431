@@ -1,0 +1,576 @@
+/*Copyright (c) DevSec Studio. All rights reserved.
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+/*-----QWidget-----*/
+QWidget
+{
+	background-color: #F6F6E3;
+	color: #6C5070;
+	border-color: #6C5070;
+
+}
+
+
+/*-----QLabel-----*/
+QLabel
+{
+	background-color: transparent;
+	color: #6C5070;
+
+}
+
+
+QLabel::disabled
+{
+	background-color: transparent;
+	color: #656565;
+
+}
+
+
+/*-----QMenuBar-----*/
+
+
+
+/*-----QMenu-----*/
+
+
+/*-----QToolTip-----*/
+QToolTip
+{
+	border : 1px solid #000000;
+	background-color: #26264f;
+	color: #ffffff;
+	border-color: #051a39;
+
+}
+
+
+/*-----QPushButton-----*/
+QPushButton
+{
+	background-color: #C2DBC1;
+	color: #6C5070;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 3px;
+	border-color: #C2DBC1;
+	padding: 5px;
+
+}
+
+
+QPushButton::disabled
+{
+	background-color: #ab90af;
+	color: #6C5070;
+	border-color: #ab90af;
+
+}
+
+
+QPushButton::hover
+{
+	background-color: #DF6A6A;
+	color: #F6F6E3;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 3px;
+	border-color: #DF6A6A;
+	padding: 5px;
+
+}
+
+
+QPushButton::pressed
+{
+	background-color: #6C5070;
+	color: #F6F6E3;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 3px;
+	border-color: #564059;
+	padding: 5px;
+
+}
+
+
+/*-----QToolButton-----*/
+
+
+/*-----QComboBox-----*/
+
+
+
+/*-----QSpinBox & QDoubleSpinBox & QDateTimeEdit-----*/
+QSpinBox, 
+QDoubleSpinBox,
+QDateTimeEdit
+{
+    background-color: #F6F6E3;
+    color: #6C5070;
+    border: 1px solid #6C5070;
+	border-radius: 3px;
+	padding : 2px;
+
+}
+
+
+
+QSpinBox:hover, 
+QDoubleSpinBox::hover,
+QDateTimeEdit::hover
+{
+    background-color: #fbfbf2;
+    border: 1px solid #6C5070;
+    color:  #6C5070;
+    padding: 2px
+
+}
+
+
+
+
+
+
+
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover,
+QDoubleSpinBox::up-button:hover, QDoubleSpinBox::down-button:hover,
+QDateTimeEdit::up-button:hover, QDateTimeEdit::down-button:hover
+{
+    background-color: #b096b4;
+    border: 1px solid #95729a;
+    
+}
+
+
+
+
+
+
+
+
+/*-----QLineEdit-----*/
+QLineEdit
+{
+    background-color: #fbfbf2;
+	color: #6C5070;
+	border-width: 1px;
+	border-radius: 3px;
+    border-color: #ececc5;
+	padding: 2px;
+
+}
+
+
+QLineEdit::disabled
+{
+	background-color: #404040;
+	color: #656565;
+	border-width: 1px;
+	border-radius: 3px;
+	border-color: #051a39;
+	padding: 2px;
+
+}
+
+
+/*-----QTextEdit-----*/
+QTextEdit
+{
+	background-color: #F6F6E3;
+	border-width: 1px;
+	color: #6C5070;
+	border-color: #6C5070;
+
+}
+
+
+QTextEdit::disabled
+{
+	background-color: #404040;
+	color: #656565;
+	border-color: #051a39;
+
+}
+
+
+/*-----QGroupBox-----*/
+QGroupBox 
+{
+    border: 1px solid;
+    border-color: #6C5070;
+    margin-top: 22px;
+
+}
+
+
+QGroupBox::title  
+{
+    background-color: #6C5070;
+    color: #F6F6E3;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 5px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+
+}
+
+
+QGroupBox::title::disabled
+{
+	background-color: #404040;
+	color: #656565;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 5px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+
+}
+
+
+/*-----QCheckBox-----*/
+
+
+
+/*-----QRadioButton-----*/
+
+
+/*-----QTableView & QTableWidget-----*/
+
+
+
+/*-----QTabWidget-----*/
+QTabBar::tab
+{
+	background-color: #C2DBC1;
+	color: #6C5070;
+	border-style: solid;
+	border-width: 1px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border-color: #aacda8;
+	padding: 5px;
+
+}
+
+
+QTabBar::tab:disabled
+{
+	background-color: #656565;
+	color: #656565;
+
+}
+
+
+QTabWidget::pane 
+{
+	background-color: #6C5070;
+	color: #F6F6E3;
+    border: 1px solid;
+    border-color: #6C5070;
+
+}
+
+
+QTabBar::tab:selected
+{
+    background-color: #6C5070;
+	color: #F6F6E3;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border-color: #614865;
+	padding: 5px;
+
+}
+
+
+QTabBar::tab:selected:disabled
+{
+	background-color: #404040;
+	color: #656565;
+
+}
+
+
+QTabBar::tab:!selected 
+{
+    background-color: #C2DBC1;
+
+}
+
+
+QTabBar::tab:!selected:hover 
+{
+    background-color: #DF6A6A;
+    color: #F6F6E3;
+
+}
+
+
+QTabBar::tab:top:!selected 
+{
+    margin-top: 3px;
+
+}
+
+
+QTabBar::tab:bottom:!selected 
+{
+    margin-bottom: 3px;
+
+}
+
+
+QTabBar::tab:top, QTabBar::tab:bottom 
+{
+    min-width: 8ex;
+    margin-right: -1px;
+    padding: 5px 10px 5px 10px;
+
+}
+
+
+QTabBar::tab:top:selected 
+{
+    border-bottom-color: none;
+
+}
+
+
+QTabBar::tab:bottom:selected 
+{
+    border-top-color: none;
+
+}
+
+
+QTabBar::tab:top:last, QTabBar::tab:bottom:last,
+QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one 
+{
+    margin-right: 0;
+
+}
+
+
+QTabBar::tab:left:!selected 
+{
+    margin-right: 3px;
+
+}
+
+
+QTabBar::tab:right:!selected
+{
+    margin-left: 3px;
+
+}
+
+
+QTabBar::tab:left, QTabBar::tab:right 
+{
+    min-height: 8ex;
+    margin-bottom: -1px;
+    padding: 10px 5px 10px 5px;
+
+}
+
+
+QTabBar::tab:left:selected 
+{
+    border-left-color: none;
+
+}
+
+
+QTabBar::tab:right:selected 
+{
+    border-right-color: none;
+
+}
+
+
+QTabBar::tab:left:last, QTabBar::tab:right:last,
+QTabBar::tab:left:only-one, QTabBar::tab:right:only-one 
+{
+    margin-bottom: 0;
+
+}
+
+
+/*-----QSlider-----*/
+
+
+/*-----QDial-----*/
+
+
+/*-----QScrollBar-----*/
+QScrollBar:horizontal
+{
+    border: 1.5px solid #564059;
+    background-color: #6C5070;
+    height: 13px;
+    margin: 0px 16px 0 16px;
+
+}
+
+
+QScrollBar::handle:horizontal
+{
+    background: #C2DBC1;
+    min-height: 20px;
+
+}
+
+
+QScrollBar::add-line:horizontal
+{
+    border: 1.5px solid #564059;
+    background-color: #C2DBC1;
+    width: 14px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+
+}
+
+
+QScrollBar::sub-line:horizontal
+{
+    border: 1.5px solid #564059;
+    background-color: #C2DBC1;
+    width: 14px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+
+}
+
+
+QScrollBar::right-arrow:horizontal
+{
+    image: url(://arrow-right.png);
+    width: 6px;
+    height: 6px;
+
+}
+
+
+QScrollBar::left-arrow:horizontal
+{
+    image: url(://arrow-left.png);
+    width: 6px;
+    height: 6px;
+
+}
+
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
+{
+    background: none;
+
+}
+
+
+QScrollBar:vertical
+{
+    background-color: #6C5070;
+    width: 13px;
+    margin: 16px 0 16px 0;
+    border: 1.5px solid #564059;
+
+}
+
+
+QScrollBar::handle:vertical
+{
+    background-color: #C2DBC1;
+    min-height: 20px;
+    border-radius: 5px;
+
+}
+
+
+QScrollBar::add-line:vertical
+{
+    border: 1.5px solid #564059;
+    background-color: #C2DBC1;
+    height: 14px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+
+}
+
+
+QScrollBar::sub-line:vertical
+{
+    border: 1.5px solid #564059;
+    background-color: #C2DBC1;
+    height: 14px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+
+}
+
+
+QScrollBar::up-arrow:vertical
+{
+    image: url(://arrow-up.png);
+    width: 6px;
+    height: 6px;
+
+}
+
+
+QScrollBar::down-arrow:vertical
+{
+    image: url(://arrow-down.png);
+    width: 6px;
+    height: 6px;
+
+}
+
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
+{
+    background: none;
+
+}
+
+
+/*-----QProgressBar-----*/
+
+/*-----QStatusBar-----*/
+QStatusBar
+{
+	background-color: #0a0a0a;
+	color: #ffffff;
+	border-color: #051a39;
+
+}
+
+
