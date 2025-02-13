@@ -78,6 +78,8 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    Wire.setPins(ESP32Pin::i2c_sda, ESP32Pin::i2c_scl);
+    Serial::log_level_max_();
 
     /*
      *  Initialize the Arduino I2C driver (Wire), the Arduino
@@ -90,6 +92,10 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    Wire.begin();
+    EEPROM.begin(EEPROMParameter::size);
+    Display::initialize();
+    Serial::initialize();
 
     /*
      *  Read the Biped serial number from the EEPROM and store it to the
@@ -113,6 +119,9 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    serial_number_ = static_cast<unsigned int>(EEPROM.readByte(static_cast<int>(AddressParameter::eeprom_serial_number)));
+
+    //EEPROMParameter::eeprom_serial_number
 
     /*
      *  Instantiate the camera and the NeoPixel global objects using the C++
@@ -125,7 +134,8 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
-
+    camera_ = std::make_shared<Camera>;
+    neopixel_ = std::make_shared<NeoPixel>;
     /*
      *  Instantiate the timer global object using the C++ STL
      *  std::make_shared function.
@@ -392,6 +402,8 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    Serial::Serial(log_level_max_()) << "Initialized with error(s).";
+
 }
 
 /**
