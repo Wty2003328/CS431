@@ -66,8 +66,6 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-    
-
 
     /*
      *  Set Arduino I2C driver object (Wire) SDA and SCL pins
@@ -99,8 +97,6 @@ setup()
     Display::initialize();
     Serial::initialize();
 
-
-
     /*
      *  Read the Biped serial number from the EEPROM and store it to the
      *  Biped serial number global variable. Note that the serial number is
@@ -126,7 +122,6 @@ setup()
     serial_number_ = static_cast<unsigned int>(EEPROM.readByte(static_cast<int>(AddressParameter::eeprom_serial_number)));
 
     //EEPROMParameter::eeprom_serial_number
-
 
     /*
      *  Instantiate the camera and the NeoPixel global objects using the C++
@@ -407,7 +402,7 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
-    Serial::Serial(log_level_max_()) << ;
+    Serial::Serial(log_level_max_()) << "Initialized with error(s).";
 
 }
 
