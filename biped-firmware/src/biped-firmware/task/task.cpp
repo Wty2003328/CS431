@@ -77,6 +77,7 @@ bestEffortTask()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    biped::firmware::Display(0) << "Biped: #" << biped::firmware::serial_number_;
 
     /*
      *  Using the Display class in the display header, print to the second line of the OLED display the
@@ -90,6 +91,8 @@ bestEffortTask()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    biped::firmware::Display(1) << "Real-Time: " << biped::firmware::execution_time_real_time_task_
+            << " " << biped::firmware::interval_real_time_task_;
 
     /*
      *  Using the ESP-IDF ESP object in the Esp header, calculate the heap utilization percentage (i.e.,
@@ -107,6 +110,8 @@ bestEffortTask()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    uint32_t heap_util = 100 - (ESP.getFreeHeap() * 100) / ESP.getHeapSize();
+    biped::firmware::Display(2) << "Heap: " << heap_util << "%";
 
     /*
      *  If the Wi-Fi global shared pointer is not a null pointer, check the Wi-Fi status using the Wi-Fi
@@ -127,6 +132,15 @@ bestEffortTask()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    if (biped::firmware::wifi_
+            && biped::firmware::wifi_->getWiFiStatus() == wl_status_t::WL_CONNECTED)
+    {
+        biped::firmware::Display(3) << "Wi-Fi: " << biped::firmware::wifi_->getWiFiLocalIP();
+    }
+    else
+    {
+        biped::firmware::Display(3) << "Wi-Fi: disconnected";
+    }
 
     /*
      *  If the controller global shared pointer is not a null pointer, check the controller active status
@@ -145,6 +159,14 @@ bestEffortTask()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    if (biped::firmware::controller_ && biped::firmware::controller_->getActiveStatus())
+    {
+        biped::firmware::Display(4) << "Controller: active";
+    }
+    else
+    {
+        biped::firmware::Display(4) << "Controller: inactive";
+    }
 
     /*
      *  If the planner global shared pointer is not a null pointer, using the planner global shared pointer,
@@ -167,6 +189,14 @@ bestEffortTask()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    if (planner_stage < 0)
+    {
+        biped::firmware::Display(5) << "Planner: inactive";
+    }
+    else
+    {
+        biped::firmware::Display(5) << "Planner: stage " << planner_stage;
+    }
 
     /*
      *  If the NeoPixel global shared pointer is not a null pointer, using the NeoPixel global shared
@@ -177,6 +207,10 @@ bestEffortTask()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    if (biped::firmware::neopixel_)
+    {
+        biped::firmware::neopixel_->show();
+    }
 
     /*
      *  Using the Display class in the display header, display the streamed items by flushing the
@@ -186,6 +220,8 @@ bestEffortTask()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    biped::firmware::Display::display();
+
 }
 
 void
@@ -814,3 +850,4 @@ udpWriteCameraTask(void* pvParameters)
 }
 }   // namespace firmware
 }   // namespace biped
+

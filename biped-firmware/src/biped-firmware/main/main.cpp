@@ -74,10 +74,13 @@ setup()
      *  Refer to the Arduino Wire header for their functions, the
      *  serial header for the serial functions, and
      *  the pin header for the I2C SDA and SCL
-     *  pins and the maximum log level.
+     *  pins and the maximum log level. parameter.h
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    Wire.setPins(ESP32Pin::i2c_sda, ESP32Pin::i2c_scl);
+//    Serial::Serial(log_level_max);
+    Serial::setLogLevelMax(SerialParameter::log_level_max);
 
     /*
      *  Initialize the Arduino I2C driver (Wire), the Arduino
@@ -90,6 +93,10 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    Wire.begin();
+    EEPROM.begin(EEPROMParameter::size);
+    Display::initialize();
+    Serial::initialize();
 
     /*
      *  Read the Biped serial number from the EEPROM and store it to the
@@ -113,6 +120,7 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    serial_number_ = static_cast<unsigned>(*EEPROM.getDataPtr());
 
     /*
      *  Instantiate the camera and the NeoPixel global objects using the C++
@@ -125,6 +133,8 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    camera_ = std::make_shared<Camera>();
+    neopixel_ = std::make_shared<NeoPixel>();
 
     /*
      *  Instantiate the timer global object using the C++ STL
@@ -392,6 +402,18 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    if (biped::firmware::Serial::getLogLevelWorst() <= LogLevel::error)
+    {
+        // print "Initialized with error(s)." to the serial
+        biped::firmware::Serial(biped::firmware::Serial::getLogLevelWorst())
+                << "Initialized with error(s).";
+    }
+    else
+    {
+        // print "Initialized."
+        biped::firmware::Serial(biped::firmware::Serial::getLogLevelWorst()) << "Initialized.";
+    }
+
 }
 
 /**
@@ -412,4 +434,5 @@ loop()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    bestEffortTask();
 }
