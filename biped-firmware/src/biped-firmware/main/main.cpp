@@ -74,12 +74,13 @@ setup()
      *  Refer to the Arduino Wire header for their functions, the
      *  serial header for the serial functions, and
      *  the pin header for the I2C SDA and SCL
-     *  pins and the maximum log level.
+     *  pins and the maximum log level. parameter.h
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
     Wire.setPins(ESP32Pin::i2c_sda, ESP32Pin::i2c_scl);
-    Serial::log_level_max_();
+//    Serial::Serial(log_level_max);
+    Serial::setLogLevelMax(SerialParameter::log_level_max);
 
     /*
      *  Initialize the Arduino I2C driver (Wire), the Arduino
@@ -119,9 +120,7 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
-    serial_number_ = static_cast<unsigned int>(EEPROM.readByte(static_cast<int>(AddressParameter::eeprom_serial_number)));
-
-    //EEPROMParameter::eeprom_serial_number
+    serial_number_ = static_cast<unsigned>(*EEPROM.getDataPtr());
 
     /*
      *  Instantiate the camera and the NeoPixel global objects using the C++
@@ -134,8 +133,9 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
-    camera_ = std::make_shared<Camera>;
-    neopixel_ = std::make_shared<NeoPixel>;
+    camera_ = std::make_shared<Camera>();
+    neopixel_ = std::make_shared<NeoPixel>();
+
     /*
      *  Instantiate the timer global object using the C++ STL
      *  std::make_shared function.
@@ -145,6 +145,7 @@ setup()
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    timer_ = std::make_shared<Timer>(TimerParameter::group, TimerParameter::index);
 
     /*
      *  Instantiate the I/O expander global objects using the C++ STL
@@ -357,6 +358,7 @@ setup()
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    timer_->setInterval(static_cast<uint64_t>(secondsToMicroseconds(PeriodParameter::fast)));
 
     /*
      *  Using the timer global shared pointer, attach the timer interrupt handler to the
@@ -367,6 +369,7 @@ setup()
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    timer_->attachInterrupt(timerInterruptHandler, nullptr);
 
     /*
      *  Using the timer global shared pointer, enable the hardware timer.
@@ -375,6 +378,7 @@ setup()
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    timer_->enable();
 
     /*
      *  Print to the serial using the Serial class in the serial header. Pass the desired log
@@ -402,7 +406,17 @@ setup()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
-    Serial::Serial(log_level_max_()) << "Initialized with error(s).";
+    if (biped::firmware::Serial::getLogLevelWorst() <= LogLevel::error)
+    {
+        // print "Initialized with error(s)." to the serial
+        biped::firmware::Serial(biped::firmware::Serial::getLogLevelWorst())
+                << "Initialized with error(s).";
+    }
+    else
+    {
+        // print "Initialized."
+        biped::firmware::Serial(biped::firmware::Serial::getLogLevelWorst()) << "Initialized.";
+    }
 
 }
 
@@ -424,4 +438,5 @@ loop()
      *
      *  TODO LAB 1 YOUR CODE HERE.
      */
+    bestEffortTask();
 }
