@@ -52,6 +52,8 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    register_interrupt_clear_ = reinterpret_cast<uint32_t*>(TIMG_INT_CLR_TIMERS_REG(group_));
+    register_interrupt_enable_ = reinterpret_cast<uint32_t*>(TIMG_INT_ENA_TIMERS_REG(group_));
 
     /*
      *  Switch on timer index.
@@ -80,6 +82,13 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            register_config_ = reinterpret_cast<uint32_t*>(TIMG_T0CONFIG_REG(group_));
+            register_alarm_low_ = reinterpret_cast<uint32_t*>(TIMG_T0ALARMLO_REG(group_));
+            register_alarm_high_ = reinterpret_cast<uint32_t*>(TIMG_T0ALARMHI_REG(group_));
+            register_counter_low_ = reinterpret_cast<uint32_t*>(TIMG_T0LO_REG(group_));
+            register_counter_high_ = reinterpret_cast<uint32_t*>(TIMG_T0HI_REG(group_));
+            register_load_low_ = reinterpret_cast<uint32_t*>(TIMG_T0LOADLO_REG(group_));
+            register_load_high_ = reinterpret_cast<uint32_t*>(TIMG_T0LOADHI_REG(group_));
 
             /*
              *  Frame the timer prescaler by first static_cast the timer prescaler parameter in the parameter
@@ -96,6 +105,8 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            uint32_t framed_prescaler = TIMG_T0_DIVIDER_M & (static_cast<uint32_t>(TimerParameter::prescaler) << TIMG_T0_DIVIDER_S);
+
 
             /*
              *  First, set the timer configuration register to zero.
@@ -116,6 +127,14 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_config_ = 0;
+
+            *register_config_ |= TIMG_T0_INCREASE;
+            *register_config_ |= TIMG_T0_AUTORELOAD;
+            *register_config_ |= TIMG_T0_LEVEL_INT_EN;
+            *register_config_ |= TIMG_T0_ALARM_EN;
+
+            *register_config_ |= framed_prescaler;
 
             /*
              *  Switch on timer group.
@@ -124,7 +143,7 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
             {
                 case TIMER_GROUP_0:
                 {
-                    /*
+                    /*framed_prescaler
                      *  Set the class member interrupt source to the corresponding ETS_TG..._LEVEL_INTR_SOURCE
                      *  macros in the soc header.
                      *
@@ -138,6 +157,8 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
                      *
                      *  TODO LAB 2 YOUR CODE HERE.
                      */
+                    interrupt_source_ = ETS_TG0_T0_LEVEL_INTR_SOURCE;
+
 
                     break;
                 }
@@ -157,6 +178,7 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
                      *
                      *  TODO LAB 2 YOUR CODE HERE.
                      */
+                    interrupt_source_ = ETS_TG1_T0_LEVEL_INTR_SOURCE;
 
                     break;
                 }
@@ -190,6 +212,13 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            register_config_ = reinterpret_cast<uint32_t*>(TIMG_T1CONFIG_REG(group_));
+            register_alarm_low_ = reinterpret_cast<uint32_t*>(TIMG_T1ALARMLO_REG(group_));
+            register_alarm_high_ = reinterpret_cast<uint32_t*>(TIMG_T1ALARMHI_REG(group_));
+            register_counter_low_ = reinterpret_cast<uint32_t*>(TIMG_T1LO_REG(group_));
+            register_counter_high_ = reinterpret_cast<uint32_t*>(TIMG_T1HI_REG(group_));
+            register_load_low_ = reinterpret_cast<uint32_t*>(TIMG_T1LOADLO_REG(group_));
+            register_load_high_ = reinterpret_cast<uint32_t*>(TIMG_T1LOADHI_REG(group_));
 
             /*
              *  Frame the timer prescaler by first static_cast the timer prescaler parameter in the parameter
@@ -206,6 +235,7 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            uint32_t framed_prescaler = TIMG_T1_DIVIDER_M & (static_cast<uint32_t>(TimerParameter::prescaler) << TIMG_T1_DIVIDER_S);
 
             /*
              *  First, set the timer configuration register to zero.
@@ -226,6 +256,15 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_config_ = 0;
+
+            *register_config_ |= TIMG_T1_INCREASE;
+            *register_config_ |= TIMG_T1_AUTORELOAD;
+            *register_config_ |= TIMG_T1_LEVEL_INT_EN;
+            *register_config_ |= TIMG_T1_ALARM_EN;
+
+            *register_config_ |= framed_prescaler;
+
 
             /*
              *  Switch on timer group.
@@ -248,6 +287,7 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
                      *
                      *  TODO LAB 2 YOUR CODE HERE.
                      */
+                    interrupt_source_ = ETS_TG0_T1_LEVEL_INTR_SOURCE;
 
                     break;
                 }
@@ -267,6 +307,7 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
                      *
                      *  TODO LAB 2 YOUR CODE HERE.
                      */
+                    interrupt_source_ = ETS_TG1_T1_LEVEL_INTR_SOURCE;
 
                     break;
                 }
@@ -296,6 +337,10 @@ Timer::Timer(const timer_group_t& group, const timer_idx_t& index) : group_(grou
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    *register_counter_low_ = 0;
+    *register_counter_high_ = 0;
+    *register_load_low_ = 0;
+    *register_load_high_ = 0;
 }
 
 bool
@@ -307,6 +352,9 @@ Timer::attachInterrupt(void
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    if (interrupt_source_ < 0) {
+        return false;
+    }
 
     /*
      *  Using the ESP-IDF esp_intr_alloc function in the esp_intr_alloc header, allocate
@@ -323,6 +371,9 @@ Timer::attachInterrupt(void
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    if (esp_intr_alloc(interrupt_source_, 0, handler, arg, &interrupt_handle_) != ESP_OK) {
+        return false;
+    }
 
     /*
      *  Using the ESP-IDF esp_intr_enable function in the esp_intr_alloc header, enable
@@ -334,6 +385,9 @@ Timer::attachInterrupt(void
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    if (esp_intr_enable(interrupt_handle_) != ESP_OK) {
+        return false;
+    }
 
     /*
      *  Switch on timer index.
@@ -352,6 +406,7 @@ Timer::attachInterrupt(void
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_interrupt_enable_ |= TIMG_T0_EN;
 
             break;
         }
@@ -367,6 +422,7 @@ Timer::attachInterrupt(void
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_interrupt_enable_ |= TIMG_T1_EN;
 
             break;
         }
@@ -402,6 +458,8 @@ Timer::clearInterrupt()
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_interrupt_clear_ |= TIMG_T0_INT_CLR;
+            *register_config_ |= TIMG_T0_ALARM_EN;
 
             break;
         }
@@ -423,6 +481,8 @@ Timer::clearInterrupt()
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_interrupt_clear_ |= TIMG_T1_INT_CLR;
+            *register_config_ |= TIMG_T1_ALARM_EN;
 
             break;
         }
@@ -450,6 +510,7 @@ Timer::detachInterrupt()
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_interrupt_enable_ &= ~(TIMG_T0_EN);
 
             break;
         }
@@ -465,6 +526,7 @@ Timer::detachInterrupt()
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_interrupt_enable_ &= ~(TIMG_T1_EN);
 
             break;
         }
@@ -484,6 +546,9 @@ Timer::detachInterrupt()
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    if (esp_intr_disable(interrupt_handle_) != ESP_OK) {
+        return false;
+    }
 
     /*
      *  Using the ESP-IDF esp_intr_free function in the esp_intr_alloc header, free the
@@ -495,6 +560,9 @@ Timer::detachInterrupt()
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    if (esp_intr_free(interrupt_handle_) != ESP_OK) {
+        return false;
+    }
 
     /*
      *  Set the class member interrupt handle pointer to a null pointer.
@@ -505,6 +573,7 @@ Timer::detachInterrupt()
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    interrupt_handle_ = nullptr;
 
     /*
      *  Return true.
@@ -528,6 +597,7 @@ Timer::disable()
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_config_ &= ~(TIMG_T0_EN);
 
             break;
         }
@@ -542,6 +612,7 @@ Timer::disable()
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_config_ &= ~(TIMG_T1_EN);
 
             break;
         }
@@ -568,6 +639,7 @@ Timer::enable()
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_config_ |= TIMG_T0_EN;
 
             break;
         }
@@ -582,6 +654,7 @@ Timer::enable()
              *
              *  TODO LAB 2 YOUR CODE HERE.
              */
+            *register_config_ |= TIMG_T1_EN;
 
             break;
         }
@@ -605,6 +678,11 @@ Timer::setInterval(const uint64_t& interval)
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
+    uint32_t higher_bits = static_cast<uint32_t>(interval >> 32);
+    uint32_t lower_bits = static_cast<uint32_t>(interval);
+
+    *register_alarm_low_ = lower_bits;
+    *register_alarm_high_ = higher_bits;
 }
 }   // namespace firmware
 }   // namespace biped
