@@ -369,7 +369,7 @@ setup()
      *
      *  TODO LAB 2 YOUR CODE HERE.
      */
-    timer_->attachInterrupt(timerInterruptHandler, nullptr);
+    timer_->attachInterrupt(&biped::firmware::timerInterruptHandler, nullptr);
 
     /*
      *  Using the timer global shared pointer, enable the hardware timer.
