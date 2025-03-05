@@ -252,6 +252,10 @@ ioExpanderAInterruptServiceTask(void* pvParameters)
          *  TODO LAB 4 YOUR CODE HERE.
          */
 
+    	if (io_expander_a_) {
+    		io_expander_a_->onInterrupt();
+    	}
+
         /*
          *  The I/O expander A interrupt handler has been detached by itself. Using the attachInterrupt
          *  function in the interrupt header, re-attach the I/O expander A interrupt handler in on-high mode.
@@ -272,6 +276,10 @@ ioExpanderAInterruptServiceTask(void* pvParameters)
          *
          *  TODO LAB 4 YOUR CODE HERE.
          */
+
+    	biped::firmware::attachInterrupt(digitalPinToInterrupt(biped::firmware::ESP32Pin::io_expander_a_interrupt),
+    									 ioExpanderAInterruptHandler,
+										 ONHIGH);
     }
 
     /*
@@ -320,6 +328,10 @@ ioExpanderBInterruptServiceTask(void* pvParameters)
          *  TODO LAB 4 YOUR CODE HERE.
          */
 
+    	if (io_expander_b_) {
+    		io_expander_b_->onInterrupt();
+    	}
+
         /*
          *  The I/O expander B interrupt handler has been detached by itself. Using the attachInterrupt
          *  function in the interrupt header, re-attach the I/O expander B interrupt handler in on-high mode.
@@ -340,6 +352,10 @@ ioExpanderBInterruptServiceTask(void* pvParameters)
          *
          *  TODO LAB 4 YOUR CODE HERE.
          */
+
+    	biped::firmware::attachInterrupt(digitalPinToInterrupt(biped::firmware::ESP32Pin::io_expander_b_interrupt),
+    									 ioExpanderBInterruptHandler,
+										 ONHIGH);
     }
 
     /*
