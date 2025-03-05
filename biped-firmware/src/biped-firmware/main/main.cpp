@@ -66,7 +66,8 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-
+	pinMode(ESP32Pin::io_expander_a_interrupt,INPUT_PULLUP);
+	pinMode(ESP32Pin::io_expander_b_interrupt,INPUT_PULLUP);
     /*
      *  Set Arduino I2C driver object (Wire) SDA and SCL pins
      *  and set the serial object maximum log level.
@@ -156,7 +157,8 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-
+    io_expander_a_=std::make_shared<IOExpander>(AddressParameter::io_expander_a);
+    io_expander_b_=std::make_shared<IOExpander>(AddressParameter::io_expander_b);
     /*
      *  Instantiate the UDP and Wi-Fi global objects using the C++ STL
      *  std::make_shared function.
@@ -267,7 +269,8 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-
+     biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::io_expander_a_interrupt),ioExpanderAInterruptHandler,ONHIGH);
+     biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::io_expander_b_interrupt),ioExpanderBInterruptHandler,ONHIGH);
     /*
      *  Using the attachInterrupt function in the interrupt header, attach the encoder
      *  interrupt handlers. What should the interrupt mode for the encoder interrupt
@@ -305,7 +308,9 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-
+     io_expander_a_->pinModePortA(IOExpanderAPortAPin::push_button_a,INPUT_PULLUP);
+     io_expander_a_->pinModePortA(IOExpanderAPortAPin::push_button_b,INPUT_PULLUP);
+     io_expander_a_->pinModePortB(IOExpanderAPortBPin::push_button_c,INPUT_PULLUP);
     /*
      *  Using I/O expander global shared pointers and the I/O expander attachInterruptPort
      *  functions, attach the push button interrupt handlers. The argument pointer for the
@@ -326,7 +331,9 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-
+     biped::firmware::attachInterrupt(IOExpanderAPortAPin::push_button_a,nullptr,FALLING);
+     biped::firmware::attachInterrupt(IOExpanderAPortAPin::push_button_b,nullptr,FALLING);
+     biped::firmware::attachInterrupt(IOExpanderAPortBPin::push_button_c,nullptr,FALLING);
     /*
      *  Create the real-time task, all UDP tasks, and the network task using the
      *  FreeRTOS xTaskCreatePinnedToCore function. Set the task descriptive name to
