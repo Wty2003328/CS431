@@ -251,6 +251,9 @@ ioExpanderAInterruptServiceTask(void* pvParameters)
          *
          *  TODO LAB 4 YOUR CODE HERE.
          */
+    	if(io_expander_a_ != nullptr){
+    	    io_expander_a_->onInterrupt();
+    	}
 
     	if (io_expander_a_) {
     		io_expander_a_->onInterrupt();
@@ -327,6 +330,9 @@ ioExpanderBInterruptServiceTask(void* pvParameters)
          *
          *  TODO LAB 4 YOUR CODE HERE.
          */
+    	if(io_expander_b_ != nullptr){
+    	            io_expander_b_->onInterrupt();
+    	        }
 
     	if (io_expander_b_) {
     		io_expander_b_->onInterrupt();
