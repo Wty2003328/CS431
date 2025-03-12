@@ -66,14 +66,9 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-<<<<<<< HEAD
-	pinMode(ESP32Pin::io_expander_a_interrupt,INPUT_PULLUP);
-	pinMode(ESP32Pin::io_expander_b_interrupt,INPUT_PULLUP);
-=======
     pinMode(ESP32Pin::io_expander_a_interrupt, INPUT_PULLUP);
     pinMode(ESP32Pin::io_expander_b_interrupt, INPUT_PULLUP);
 
->>>>>>> main
     /*
      *  Set Arduino I2C driver object (Wire) SDA and SCL pins
      *  and set the serial object maximum log level.
