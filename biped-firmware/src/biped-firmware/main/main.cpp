@@ -178,7 +178,9 @@ setup()
      *
      *  TODO LAB 5 YOUR CODE HERE.
      */
-
+    wifi_=std::make_shared<WiFi>();
+    udp_biped_message_=std::make_shared<biped::firmware::UDP>();
+    udp_camera_=std::make_shared<biped::firmware::UDP>();
     /*
      *  Instantiate the sensor and actuator global objects using the C++ STL
      *  std::make_shared function.
@@ -275,14 +277,9 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-<<<<<<< HEAD
-     biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::io_expander_a_interrupt),ioExpanderAInterruptHandler,ONHIGH);
-     biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::io_expander_b_interrupt),ioExpanderBInterruptHandler,ONHIGH);
-=======
     biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::io_expander_a_interrupt),ioExpanderAInterruptHandler,ONHIGH);
     biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::io_expander_b_interrupt),ioExpanderBInterruptHandler,ONHIGH);
 
->>>>>>> main
     /*
      *  Using the attachInterrupt function in the interrupt header, attach the encoder
      *  interrupt handlers. What should the interrupt mode for the encoder interrupt
@@ -320,18 +317,12 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-<<<<<<< HEAD
-     io_expander_a_->pinModePortA(IOExpanderAPortAPin::push_button_a,INPUT_PULLUP);
-     io_expander_a_->pinModePortA(IOExpanderAPortAPin::push_button_b,INPUT_PULLUP);
-     io_expander_a_->pinModePortB(IOExpanderAPortBPin::push_button_c,INPUT_PULLUP);
-=======
     io_expander_a_->pinModePortA(IOExpanderAPortAPin::push_button_a,INPUT_PULLUP);
     io_expander_a_->pinModePortA(IOExpanderAPortAPin::push_button_b,INPUT_PULLUP);
     io_expander_a_->pinModePortB(IOExpanderAPortBPin::push_button_c,INPUT_PULLUP);
 
 //    io_expander_b_->pinModePortA(0, INPUT_PULLUP);
 
->>>>>>> main
     /*
      *  Using I/O expander global shared pointers and the I/O expander attachInterruptPort
      *  functions, attach the push button interrupt handlers. The argument pointer for the
@@ -352,11 +343,6 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-<<<<<<< HEAD
-     biped::firmware::attachInterrupt(IOExpanderAPortAPin::push_button_a,nullptr,FALLING);
-     biped::firmware::attachInterrupt(IOExpanderAPortAPin::push_button_b,nullptr,FALLING);
-     biped::firmware::attachInterrupt(IOExpanderAPortBPin::push_button_c,nullptr,FALLING);
-=======
     io_expander_a_->attachInterruptPortA(IOExpanderAPortAPin::push_button_a, pushButtonAInterruptHandler, nullptr, FALLING); // default button a
 //    io_expander_a_->attachInterruptPortA(IOExpanderAPortAPin::push_button_a, pushButtonAInterruptHandler, nullptr, ONLOW); // For demo 3: level-triggered button a, on-low
     io_expander_a_->attachInterruptPortA(IOExpanderAPortAPin::push_button_b, pushButtonBInterruptHandler, nullptr, FALLING);
@@ -365,7 +351,6 @@ setup()
 //    io_expander_b_->attachInterruptPortA(0, pushButtonAInterruptHandler, nullptr, FALLING); // For demo 4.2: IOExpanderB external button, edge-triggered
 //    io_expander_b_->attachInterruptPortA(0, pushButtonAInterruptHandler, nullptr, ONLOW); // For demo 4.3: IOExpanderB external button, level-triggered
 
->>>>>>> main
     /*
      *  Create the real-time task, all UDP tasks, and the network task using the
      *  FreeRTOS xTaskCreatePinnedToCore function. Set the task descriptive name to
