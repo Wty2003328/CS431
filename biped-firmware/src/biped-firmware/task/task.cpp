@@ -386,7 +386,10 @@ networkTask(void* pvParameters)
      *
      *  TODO LAB 5 YOUR CODE HERE.
      */
-
+    if(wifi_!=nullptr)
+    {
+    	wifi_->initialize();
+    }
     /*
      *  Use a spin lock to block this task when the Wi-Fi global shared pointer is a null
      *  pointer, or when the Wi-Fi status is not connected (i.e., not WL_CONNECTED defined
@@ -397,7 +400,9 @@ networkTask(void* pvParameters)
      *
      *  TODO LAB 5 YOUR CODE HERE.
      */
-
+    while (wifi_->getWiFiStatus() != WL_CONNECTED)
+       {
+       }
     /*
      *  Validate the Biped message UDP global shared pointer.
      */
@@ -411,7 +416,7 @@ networkTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+    	udp_biped_message_->initialize(NetworkParameter::port_udp_biped_message);
         /*
          *  Using the FreeRTOS xTaskNotifyGive function, wake up the Biped message UDP
          *  read and write tasks.
@@ -436,7 +441,7 @@ networkTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+    	udp_camera_->initialize(NetworkParameter::port_udp_camera);
         /*
          *  Using the FreeRTOS xTaskNotifyGive function, wake up the camera UDP write task.
          *
@@ -639,7 +644,10 @@ udpReadBipedMessageTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+    	if(wifi_==nullptr ||wifi_->getWiFiStatus()==WL_CONNECTED)
+    	{
+    		continue;
+    	}
         /*
          *  Using the Biped message UDP global shared pointer, read the message from the Biped
          *  ground station into a string.
@@ -650,13 +658,16 @@ udpReadBipedMessageTask(void* pvParameters)
          *  TODO LAB 5 YOUR CODE HERE.
          */
         std::string message = "";
-
+        message=udp_biped_message_->read(NetworkParameter::ip_ground_station,NetworkParameter::port_udp_biped_message,NetworkParameter::buffer_size_biped_message);
         /*
          *  Skip the current iteration if the message read above is empty.
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+        if(message.empty())
+        {
+        	continue;
+        }
         /*
          *  Declare deserialized Biped message struct, serialized message buffer,
          *  and the deserializer.
@@ -690,6 +701,11 @@ udpReadBipedMessageTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
+        if(controller_!=nullptr)
+        {
+        	controller_->setControllerParameter(message_deserialized.controller_parameter);
+        	controller_->setControllerReference(message_deserialized.controller_reference);
+        }
     }
 
     /*
@@ -742,7 +758,10 @@ udpWriteBipedMessageTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+    	if(wifi_==nullptr ||wifi_->getWiFiStatus()==WL_CONNECTED)
+    	{
+    	   continue;
+    	}
         /*
          *  Declare Biped message struct, serialized message buffer, static message sequence,
          *  and the serializer.
@@ -759,7 +778,8 @@ udpWriteBipedMessageTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+        message.sequence=sequence;
+        message.timestamp=micros();
         /*
          *  If the sensor global shared pointer is not a null pointer, using the sensor global
          *  shared pointer, obtain the encoder, IMU, and time-of-flight data structs and set
@@ -771,7 +791,12 @@ udpWriteBipedMessageTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+        if(sensor_!=nullptr)
+        {
+        	message.encoder_data=sensor_->getEncoderData();
+        	message.imu_data=sensor_->getIMUData();
+        	message.time_of_flight_data=sensor_->getTimeOfFlightData();
+        }
         /*
          *  If the controller global shared pointer is not a null pointer, using the controller global
          *  shared pointer, obtain the controller parameter and controller reference structs and set
@@ -783,7 +808,11 @@ udpWriteBipedMessageTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+        if(controller_!=nullptr)
+        {
+        	message.controller_parameter=controller_->getControllerParameter();
+        	message.controller_reference=controller_->getControllerReference();
+        }
         /*
          *  If the actuator global shared pointer is not a null pointer, using the actuator global
          *  shared pointer, obtain the actuation command struct and set it to the actuation command
@@ -794,7 +823,10 @@ udpWriteBipedMessageTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
-
+        if(actuator_!=nullptr)
+        {
+        	message.actuation_command=actuator_->getActuationCommand();
+        }
         /*
          *  Serialize the Biped message struct into the serialized message buffer.
          */
@@ -813,6 +845,8 @@ udpWriteBipedMessageTask(void* pvParameters)
              *
              *  TODO LAB 5 YOUR CODE HERE.
              */
+
+        	udp_biped_message_->write(NetworkParameter::ip_ground_station,NetworkParameter::port_udp_biped_message,std::string(message_serialized.begin(),message_serialized.end()));
         }
         else
         {
@@ -827,6 +861,7 @@ udpWriteBipedMessageTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
+        sequence++;
     }
 
     /*
@@ -879,6 +914,10 @@ udpWriteCameraTask(void* pvParameters)
          *
          *  TODO LAB 5 YOUR CODE HERE.
          */
+    	if(camera_!=nullptr)
+    	{
+    		camera_->SendJPGFrameOverUDP(udp_camera_,NetworkParameter::ip_ground_station,NetworkParameter::port_udp_camera);
+    	}
     }
 
     /*

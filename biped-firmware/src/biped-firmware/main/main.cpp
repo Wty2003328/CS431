@@ -165,10 +165,6 @@ setup()
      */
     io_expander_a_=std::make_shared<IOExpander>(AddressParameter::io_expander_a);
     io_expander_b_=std::make_shared<IOExpander>(AddressParameter::io_expander_b);
-<<<<<<< HEAD
-=======
-
->>>>>>> main
     /*
      *  Instantiate the UDP and Wi-Fi global objects using the C++ STL
      *  std::make_shared function.
