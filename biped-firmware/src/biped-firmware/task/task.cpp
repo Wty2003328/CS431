@@ -198,6 +198,12 @@ bestEffortTask()
         biped::firmware::Display(5) << "Planner: stage " << planner_stage;
     }
 
+    // prints state of push button a to OLED
+    biped::firmware::Display(6) << "A State: " << io_expander_a_->digitalReadPortA(IOExpanderAPortAPin::push_button_a);
+
+//    biped::firmware::Display(6) << "External State: " << io_expander_b_->digitalReadPortA(0); // demo 4.1: prints state of external button
+
+
     /*
      *  If the NeoPixel global shared pointer is not a null pointer, using the NeoPixel global shared
      *  pointer, show the NeoPixel frame by flushing the frame to the NeoPixel array.
@@ -251,6 +257,9 @@ ioExpanderAInterruptServiceTask(void* pvParameters)
          *
          *  TODO LAB 4 YOUR CODE HERE.
          */
+        if(io_expander_a_ != nullptr){
+            io_expander_a_->onInterrupt();
+        }
 
         /*
          *  The I/O expander A interrupt handler has been detached by itself. Using the attachInterrupt
@@ -272,6 +281,8 @@ ioExpanderAInterruptServiceTask(void* pvParameters)
          *
          *  TODO LAB 4 YOUR CODE HERE.
          */
+        biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::io_expander_a_interrupt), ioExpanderAInterruptHandler, ONHIGH);
+
     }
 
     /*
@@ -319,6 +330,9 @@ ioExpanderBInterruptServiceTask(void* pvParameters)
          *
          *  TODO LAB 4 YOUR CODE HERE.
          */
+        if(io_expander_b_ != nullptr){
+            io_expander_b_->onInterrupt();
+        }
 
         /*
          *  The I/O expander B interrupt handler has been detached by itself. Using the attachInterrupt
@@ -340,6 +354,7 @@ ioExpanderBInterruptServiceTask(void* pvParameters)
          *
          *  TODO LAB 4 YOUR CODE HERE.
          */
+        biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::io_expander_b_interrupt), ioExpanderBInterruptHandler, ONHIGH);
     }
 
     /*
