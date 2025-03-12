@@ -315,6 +315,8 @@ setup()
     io_expander_a_->pinModePortA(IOExpanderAPortAPin::push_button_b,INPUT_PULLUP);
     io_expander_a_->pinModePortB(IOExpanderAPortBPin::push_button_c,INPUT_PULLUP);
 
+//    io_expander_b_->pinModePortA(0, INPUT_PULLUP);
+
     /*
      *  Using I/O expander global shared pointers and the I/O expander attachInterruptPort
      *  functions, attach the push button interrupt handlers. The argument pointer for the
@@ -335,10 +337,13 @@ setup()
      *
      *  TODO LAB 4 YOUR CODE HERE.
      */
-    io_expander_a_->attachInterruptPortA(IOExpanderAPortAPin::push_button_a, pushButtonAInterruptHandler, nullptr, RISING); // default button a
+    io_expander_a_->attachInterruptPortA(IOExpanderAPortAPin::push_button_a, pushButtonAInterruptHandler, nullptr, FALLING); // default button a
 //    io_expander_a_->attachInterruptPortA(IOExpanderAPortAPin::push_button_a, pushButtonAInterruptHandler, nullptr, ONLOW); // For demo 3: level-triggered button a, on-low
-    io_expander_a_->attachInterruptPortA(IOExpanderAPortAPin::push_button_b, pushButtonBInterruptHandler, nullptr, RISING);
-    io_expander_a_->attachInterruptPortB(IOExpanderAPortBPin::push_button_c, pushButtonCInterruptHandler, nullptr, RISING);
+    io_expander_a_->attachInterruptPortA(IOExpanderAPortAPin::push_button_b, pushButtonBInterruptHandler, nullptr, FALLING);
+    io_expander_a_->attachInterruptPortB(IOExpanderAPortBPin::push_button_c, pushButtonCInterruptHandler, nullptr, FALLING);
+
+//    io_expander_b_->attachInterruptPortA(0, pushButtonAInterruptHandler, nullptr, FALLING); // For demo 4.2: IOExpanderB external button, edge-triggered
+//    io_expander_b_->attachInterruptPortA(0, pushButtonAInterruptHandler, nullptr, ONLOW); // For demo 4.3: IOExpanderB external button, level-triggered
 
     /*
      *  Create the real-time task, all UDP tasks, and the network task using the

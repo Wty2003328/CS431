@@ -201,6 +201,8 @@ bestEffortTask()
     // prints state of push button a to OLED
     biped::firmware::Display(6) << "A State: " << io_expander_a_->digitalReadPortA(IOExpanderAPortAPin::push_button_a);
 
+//    biped::firmware::Display(6) << "External State: " << io_expander_b_->digitalReadPortA(0); // demo 4.1: prints state of external button
+
 
     /*
      *  If the NeoPixel global shared pointer is not a null pointer, using the NeoPixel global shared
