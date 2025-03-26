@@ -514,7 +514,10 @@ realTimeTask(void* pvParameters)
          *
          *  TODO LAB 6 YOUR CODE HERE.
          */
-
+        if(sensor_!=nullptr)
+     {
+        sensor_->onEncoderLeftA();
+     }
         /*
          *  If the controller global shared pointer is not a null pointer, using the controller global
          *  shared pointer, perform fast domain control.
