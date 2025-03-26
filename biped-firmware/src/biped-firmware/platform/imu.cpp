@@ -32,6 +32,7 @@ IMU::IMU()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    initialize();
 }
 
 IMUData
@@ -42,7 +43,7 @@ IMU::getData() const
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    return IMUData();
+    return mpu6050_data_;
 }
 
 void
@@ -65,6 +66,10 @@ IMU::read()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    if (!mpu6050_.getEvent(&acceleration, &angular_velocity, &temperature)) {
+        biped::firmware::Serial(LogLevel::error) << "Couldn't get IMU event.";
+        return;
+    }
 
     /*
      *  Using the populated MPU6050 sensor event structs, populate
@@ -91,6 +96,7 @@ IMU::read()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    // -arctan(acc_x/acc_z)
 }
 
 void
@@ -106,6 +112,10 @@ IMU::initialize()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    if (!mpu6050_.begin()) {
+        biped::firmware::Serial(LogLevel::error) << "Couldn't initialize IMU driver object.";
+        return;
+    }
 
     /*
      *  Configure the Adafruit MPU6050 IMU driver object.
@@ -118,6 +128,7 @@ IMU::initialize()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    read();
 
     /*
      *  Perform initial Y attitude calculation and set the calculated
