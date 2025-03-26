@@ -300,7 +300,7 @@ pushButtonAInterruptHandler(void* arg)
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    serial_number_++;
+//    serial_number_++; // demo lab 4
 }
 
 void IRAM_ATTR
