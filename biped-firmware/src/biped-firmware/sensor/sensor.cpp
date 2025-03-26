@@ -49,6 +49,8 @@ Sensor::Sensor()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
+	io_expander_a_->pinModePortA(IOExpanderAPortAPin::time_of_flight_left_shutdown, INPUT_PULLUP);
+
     /*
      *  Instantiate the class member time-of-flight objects using the C++ STL
      *  std::make_unique function.
@@ -65,6 +67,17 @@ Sensor::Sensor()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+
+	time_of_flight_left_ = std::make_shared<TimeOfFlight>(IOExpanderAPortAPin::time_of_flight_left_interrupt,
+														  IOExpanderAPortAPin::time_of_flight_left_shutdown,
+														  io_expander_a_);
+	time_of_flight_middle_ = std::make_shared<TimeOfFlight>(IOExpanderAPortBPin::time_of_flight_middle_interrupt,
+															IOExpanderAPortBPin::time_of_flight_middle_shutdown,
+															io_expander_b_);
+	time_of_flight_right_ = std::make_shared<TimeOfFlight>(IOExpanderAPortBPin::time_of_flight_right_interrupt,
+														   IOExpanderAPortBPin::time_of_flight_right_shutdown,
+														   io_expander_b_);
+
 }
 
 EncoderData
