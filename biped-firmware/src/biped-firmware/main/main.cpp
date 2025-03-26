@@ -301,10 +301,10 @@ setup()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_left_encoder_a),encoderLeftAInterruptHandler,ONHIGH);
-    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_left_encoder_b),encoderLeftBInterruptHandler,ONHIGH);
-    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_a),encoderRightAInterruptHandler,ONHIGH);
-    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_a),encoderRightBInterruptHandler,ONHIGH);
+    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_left_encoder_a),encoderLeftAInterruptHandler,CHANGE);
+    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_left_encoder_b),encoderLeftBInterruptHandler,CHANGE);
+    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_a),encoderRightAInterruptHandler,CHANGE);
+    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_a),encoderRightBInterruptHandler,CHANGE);
     /*
      *  Using I/O expander global shared pointers and the I/O expander pinModePort
      *  functions, set pin mode for the push button pins. Use pull-up if the pin mode
