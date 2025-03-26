@@ -45,7 +45,8 @@ Actuator::Actuator()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
+      pinMode(ESP32Pin::motor_left_pwm, OUTPUT);
+      pinMode(ESP32Pin::motor_right_pwm, OUTPUT);
     /*
      *  Validate I/O expander global shared pointer.
      */
@@ -61,6 +62,9 @@ Actuator::Actuator()
          *
          *  TODO LAB 6 YOUR CODE HERE.
          */
+        io_expander_a_->pinModePortA(IOExpanderAPortAPin::motor_left_direction, OUTPUT);
+        io_expander_a_->pinModePortA(IOExpanderAPortAPin::motor_right_direction, OUTPUT);
+        io_expander_a_->pinModePortB(IOExpanderAPortBPin::motor_enable, OUTPUT);
     }
     else
     {
@@ -76,7 +80,7 @@ Actuator::getActuationCommand() const
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    return ActuationCommand();
+    return actuation_command_;
 }
 
 void
@@ -88,6 +92,7 @@ Actuator::actuate(const ActuationCommand& actuation_command)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+     actuation_command_ = actuation_command;
 
     /*
      *  Using the I/O expander digitalWritePort functions, write
@@ -98,6 +103,7 @@ Actuator::actuate(const ActuationCommand& actuation_command)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+     io_expander_a_->digitalWritePortB(IOExpanderAPortBPin::motor_enable, actuation_command_.motor_enable);
 
     /*
      *  Using the I/O expander digitalWritePort functions, write
@@ -111,6 +117,8 @@ Actuator::actuate(const ActuationCommand& actuation_command)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+     io_expander_a_->digitalWritePortA(IOExpanderAPortAPin::motor_left_direction, actuation_command_.motor_left_forward);
+     io_expander_a_->digitalWritePortA(IOExpanderAPortAPin::motor_right_direction, actuation_command_.motor_right_forward);
 
     /*
      *  Using the clamp function from the math header, clamp
@@ -141,6 +149,14 @@ Actuator::actuate(const ActuationCommand& actuation_command)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+     double
+     clamp(const double& data, const double& lower_bound, const double& upper_bound);
+
+     double left_pwm_clamp = clamp(actuation_command_.motor_left_pwm, static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
+     double right_pwm_clamp = clamp(actuation_command_.motor_right_pwm, static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
+
+     digitalWrite(ESP32Pin::motor_left_pwm, static_cast<int>(left_pwm_clamp));
+     digitalWrite(ESP32Pin::motor_right_pwm, static_cast<int>(right_pwm_clamp));
 }
 }   // namespace firmware
 }   // namespace biped
