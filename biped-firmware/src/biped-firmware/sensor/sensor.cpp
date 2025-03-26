@@ -68,13 +68,13 @@ Sensor::Sensor()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-	time_of_flight_left_ = std::make_shared<TimeOfFlight>(IOExpanderAPortAPin::time_of_flight_left_interrupt,
+	time_of_flight_left_ = std::make_unique<TimeOfFlight>(IOExpanderAPortAPin::time_of_flight_left_interrupt,
 														  IOExpanderAPortAPin::time_of_flight_left_shutdown,
 														  io_expander_a_);
-	time_of_flight_middle_ = std::make_shared<TimeOfFlight>(IOExpanderAPortBPin::time_of_flight_middle_interrupt,
+	time_of_flight_middle_ = std::make_unique<TimeOfFlight>(IOExpanderAPortBPin::time_of_flight_middle_interrupt,
 															IOExpanderAPortBPin::time_of_flight_middle_shutdown,
 															io_expander_b_);
-	time_of_flight_right_ = std::make_shared<TimeOfFlight>(IOExpanderAPortBPin::time_of_flight_right_interrupt,
+	time_of_flight_right_ = std::make_unique<TimeOfFlight>(IOExpanderAPortBPin::time_of_flight_right_interrupt,
 														   IOExpanderAPortBPin::time_of_flight_right_shutdown,
 														   io_expander_b_);
 
