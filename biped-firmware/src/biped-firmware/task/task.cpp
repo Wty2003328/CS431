@@ -227,6 +227,14 @@ bestEffortTask()
      */
     biped::firmware::Display::display();
 
+    // LAB 6 DEMO
+    struct ActuationCommand lab6;
+    lab6.motor_enable = 1;
+    lab6.motor_left_forward = 1;
+    lab6.motor_right_forward = 1;
+    lab6.motor_left_pwm = 50;
+    lab6.motor_right_pwm = 50;
+    actuator_->actuate(lab6);
 }
 
 void
@@ -514,10 +522,11 @@ realTimeTask(void* pvParameters)
          *
          *  TODO LAB 6 YOUR CODE HERE.
          */
-        if(sensor_!=nullptr)
-     {
-        sensor_->onEncoderLeftA();
-     }
+
+    	if (sensor_) {
+    		sensor_->sense(true);
+    	}
+
         /*
          *  If the controller global shared pointer is not a null pointer, using the controller global
          *  shared pointer, perform fast domain control.
@@ -543,6 +552,10 @@ realTimeTask(void* pvParameters)
              *  TODO LAB 6 YOUR CODE HERE.
              */
 
+        	if (sensor_) {
+        		sensor_->sense(false);
+        	}
+
             /*
              *  If the controller global shared pointer is not a null pointer, using the controller global
              *  shared pointer, perform slow domain control.
@@ -560,6 +573,8 @@ realTimeTask(void* pvParameters)
              *
              *  TODO LAB 6 YOUR CODE HERE.
              */
+
+        	timer_domain_ = 0;
         }
 
         /*
@@ -583,6 +598,8 @@ realTimeTask(void* pvParameters)
          *
          *  TODO LAB 6 YOUR CODE HERE.
          */
+
+        timer_domain_ += PeriodParameter::fast;
 
         /*
          *  Calculate the real-time task execution time by subtracting the current time in microseconds,
@@ -946,4 +963,5 @@ udpWriteCameraTask(void* pvParameters)
 }
 }   // namespace firmware
 }   // namespace biped
+
 
