@@ -93,8 +93,8 @@ IMU::read()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-    mpu6050_data_.acceleration_x = -acceleration.acceleration.x;
-    mpu6050_data_.acceleration_y = acceleration.acceleration.y;
+    mpu6050_data_.acceleration_x = acceleration.acceleration.x;
+    mpu6050_data_.acceleration_y = -acceleration.acceleration.y;
     mpu6050_data_.acceleration_z = acceleration.acceleration.z;
     mpu6050_data_.angular_velocity_x = -angular_velocity.gyro.roll;
     mpu6050_data_.angular_velocity_y = angular_velocity.gyro.pitch;

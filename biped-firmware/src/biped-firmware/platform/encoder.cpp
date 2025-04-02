@@ -178,7 +178,7 @@ Encoder::onLeftB()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-	steps_left_ += digitalReadFromISR(ESP32Pin::motor_left_encoder_b);
+	steps_left_ -= digitalReadFromISR(ESP32Pin::motor_left_encoder_b);
 }
 
 void IRAM_ATTR
@@ -194,7 +194,7 @@ Encoder::onRightA()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-	steps_right_ += digitalReadFromISR(ESP32Pin::motor_right_encoder_a);
+	steps_right_ -= digitalReadFromISR(ESP32Pin::motor_right_encoder_a);
 }
 
 void IRAM_ATTR
