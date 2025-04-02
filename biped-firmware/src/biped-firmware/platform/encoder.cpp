@@ -50,10 +50,10 @@ Encoder::Encoder() : steps_left_(0), steps_right_(0)
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-	pinMode(ESP32Pin::motor_left_encoder_a, CHANGE);
-	pinMode(ESP32Pin::motor_left_encoder_b, CHANGE);
-	pinMode(ESP32Pin::motor_right_encoder_a, CHANGE);
-	pinMode(ESP32Pin::motor_right_encoder_b, CHANGE);
+	pinMode(ESP32Pin::motor_left_encoder_a, INPUT_PULLUP);
+	pinMode(ESP32Pin::motor_left_encoder_b, INPUT_PULLUP);
+	pinMode(ESP32Pin::motor_right_encoder_a, INPUT_PULLUP);
+	pinMode(ESP32Pin::motor_right_encoder_b, INPUT_PULLUP);
 
     /*
      *  Configure X velocity low-pass filter.
@@ -134,12 +134,10 @@ Encoder::calculateVelocity()
      */
 
     long diff = data_.steps - steps_last;
-    double diff_m = diff / EncoderParameter::steps_per_meter;
+    double diff_m = diff / static_cast<double>(EncoderParameter::steps_per_meter);
     double diff_mps = diff_m / PeriodParameter::slow;
 
     data_.velocity_x = low_pass_filter_velocity_x_.filter(diff_mps);
-
-
 
     /*
      *  Update the last overall encoder steps local variable to be the current

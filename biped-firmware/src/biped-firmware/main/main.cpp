@@ -309,7 +309,6 @@ setup()
     biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_a), encoderRightAInterruptHandler, CHANGE);
     biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_b), encoderRightBInterruptHandler, CHANGE);
 
-
     /*
      *  Using I/O expander global shared pointers and the I/O expander pinModePort
      *  functions, set pin mode for the push button pins. Use pull-up if the pin mode

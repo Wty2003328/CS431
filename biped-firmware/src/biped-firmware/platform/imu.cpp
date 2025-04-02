@@ -69,7 +69,8 @@ IMU::read()
      */
 
     if (!mpu6050_.getEvent(&acceleration, &angular_velocity, &temperature)) {
-    	Serial(LogLevel::error) << "could not read from Adafruit MPU6050\n";
+    	Serial(LogLevel::error) << "could not read IMU\n";
+        return;
     }
 
     /*
@@ -127,7 +128,9 @@ IMU::initialize()
      */
 
 	mpu6050_ = Adafruit_MPU6050();
-	mpu6050_.begin(AddressParameter::imu_mpu6050);
+	if (!mpu6050_.begin(AddressParameter::imu_mpu6050)) {
+        Serial(LogLevel::error) << "could not initialize IMU\n";
+    }
 
     /*
      *  Configure the Adafruit MPU6050 IMU driver object.
