@@ -92,12 +92,12 @@ IMU::read()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-    mpu6050_data_.acceleration_x = acceleration.acceleration.x;
+    mpu6050_data_.acceleration_x = -acceleration.acceleration.x;
     mpu6050_data_.acceleration_y = acceleration.acceleration.y;
     mpu6050_data_.acceleration_z = acceleration.acceleration.z;
-    mpu6050_data_.angular_velocity_x = angular_velocity.gyro.roll;
+    mpu6050_data_.angular_velocity_x = -angular_velocity.gyro.roll;
     mpu6050_data_.angular_velocity_y = angular_velocity.gyro.pitch;
-    mpu6050_data_.angular_velocity_z = angular_velocity.gyro.heading;
+    mpu6050_data_.angular_velocity_z = -angular_velocity.gyro.heading;
     mpu6050_data_.compass_x = 0;
     mpu6050_data_.compass_y = 0;
     mpu6050_data_.compass_z = 0;
@@ -159,7 +159,7 @@ IMU::initialize()
 
     double ax = mpu6050_data_.acceleration_x;
     double az = mpu6050_data_.acceleration_z;
-    const double attitude_y_raw = atan2(-ax, az);
+    const double attitude_y_raw = atan2(ax, az);
 
     mpu6050_data_.attitude_y = degreesToRadians(attitude_y_raw);
 
@@ -210,7 +210,7 @@ IMU::calculateAttitude()
 
     double ax = mpu6050_data_.acceleration_x;
     double az = mpu6050_data_.acceleration_z;
-    const double attitude_y_raw = atan2(-ax, az);
+    const double attitude_y_raw = atan2(ax, az);
 
     /*
      *  Filter the raw Y attitude data using the Kalman filter.
