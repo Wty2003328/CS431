@@ -528,6 +528,9 @@ realTimeTask(void* pvParameters)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+    	if (controller_) {
+    	    controller_->control(true);
+    	}
 
         /*
          *  Slow domain tasks.
@@ -557,6 +560,9 @@ realTimeTask(void* pvParameters)
              *
              *  TODO LAB 7 YOUR CODE HERE.
              */
+        	if (controller_) {
+        	    controller_->control(false);
+        	}
 
             /*
              *  Reset period domain timer global variable to 0.
@@ -581,6 +587,12 @@ realTimeTask(void* pvParameters)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+        if (controller_) {
+            ActuationCommand a = controller_->getActuationCommand();
+            if (actuator_) {
+                actuator_->actuate(a);
+            }
+        }
 
         /*
          *  Add the fast domain period to the period domain timer global variable.

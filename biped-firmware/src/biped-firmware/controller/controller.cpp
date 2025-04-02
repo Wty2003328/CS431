@@ -234,6 +234,7 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    setControllerParameter(controller_parameter_);
 
     /*
      *  Using the setControllerReference class member function, set the
@@ -241,6 +242,7 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    setControllerReference(controller_reference_);
 
     /*
      *  Initialize NeoPixel frame for controller active status.
@@ -269,7 +271,7 @@ Controller::getActuationCommand() const
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    return ActuationCommand();
+    return actuation_command_;
 }
 
 bool
@@ -280,7 +282,7 @@ Controller::getActiveStatus() const
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    return false;
+    return active_;
 }
 
 ControllerParameter
@@ -291,7 +293,7 @@ Controller::getControllerParameter() const
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    return ControllerParameter();
+    return controller_parameter_;
 }
 
 ControllerReference
@@ -302,7 +304,7 @@ Controller::getControllerReference() const
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    return ControllerReference();
+    return controller_reference_;
 }
 
 void
@@ -315,6 +317,7 @@ Controller::setControllerParameter(const ControllerParameter& controller_paramet
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    controller_parameter_ = controller_parameter;
 
     /*
      *  Set the Z attitude open-loop controller gain entry in the class member
@@ -323,6 +326,7 @@ Controller::setControllerParameter(const ControllerParameter& controller_paramet
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    open_loop_controller_attitude_z_.setGain(controller_parameter_.attitude_z_gain_open_loop);
 
     /*
      *  Set the PID controller gain structs in the class member controller
@@ -330,6 +334,9 @@ Controller::setControllerParameter(const ControllerParameter& controller_paramet
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    pid_controller_attitude_y_.setGain(controller_parameter_.pid_controller_gain_attitude_y);
+    pid_controller_attitude_z_.setGain(controller_parameter_.pid_controller_gain_attitude_z);
+    pid_controller_position_x_.setGain(controller_parameter_.pid_controller_gain_position_x);
 
     /*
      *  Set the controller saturation structs in the class member controller
@@ -337,6 +344,9 @@ Controller::setControllerParameter(const ControllerParameter& controller_paramet
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    pid_controller_attitude_y_.setSaturation(controller_parameter_.pid_controller_saturation_attitude_y);
+    pid_controller_attitude_z_.setSaturation(controller_parameter_.pid_controller_saturation_attitude_z);
+    pid_controller_position_x_.setSaturation(controller_parameter_.pid_controller_saturation_position_x);
 }
 
 void
@@ -349,6 +359,7 @@ Controller::setControllerReference(const ControllerReference& controller_referen
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    controller_reference_ = controller_reference;
 
     /*
      *  Set the entries in the class member controller reference
@@ -361,6 +372,11 @@ Controller::setControllerReference(const ControllerReference& controller_referen
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    open_loop_controller_attitude_z_.setReference(controller_reference_.attitude_z);
+    pid_controller_attitude_z_.setReference(controller_reference_.attitude_z);
+
+    pid_controller_attitude_y_.setReference(controller_reference_.attitude_y);
+    pid_controller_position_x_.setReference(controller_reference_.position_x);
 }
 
 void
@@ -384,6 +400,7 @@ Controller::setPeriod(const double& period, const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+        pid_controller_attitude_y_.setPeriod(period);
     }
     else
     {
@@ -393,6 +410,7 @@ Controller::setPeriod(const double& period, const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+        pid_controller_position_x_.setPeriod(period);
 
         /*
          *  Set the class member Z attitude (yaw) PID controller
@@ -400,6 +418,7 @@ Controller::setPeriod(const double& period, const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+        pid_controller_attitude_z_.setPeriod(period);
     }
 }
 
