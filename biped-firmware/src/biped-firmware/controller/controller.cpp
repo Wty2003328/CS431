@@ -412,13 +412,14 @@ Controller::control(const bool& fast_domain)
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-
+	IMUData current_imu_data=sensor_->getIMUData();
+	EncoderData current_encoder_data=sensor_->getEncoderData();
     /*
      *  Update the controller active status using the IMU data struct.
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-
+	updateActiveStatus(current_imu_data);
     /*
      *  The reason behind the fast and slow time domain setup here
      *  is similar to the explanation provided in the sensor header.
@@ -438,7 +439,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
-
+    	pid_controller_attitude_y_.setState(current_imu_data.attitude_y);
         /*
          *  Set the error differential input (delta e) of the class member
          *  Y attitude (pitch) PID controller to be the Y angular velocity
@@ -446,7 +447,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
-
+    	pid_controller_attitude_y_.setErrorDifferential(current_imu_data.angular_velocity_y);
         /*
          *  Execute the class member Y attitude (pitch) PID controller
          *  and store the output into the class member Y attitude (pitch)
@@ -454,6 +455,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+    	output_attitude_y_=pid_controller_attitude_y_.control();
     }
     else
     {
@@ -464,7 +466,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
-
+    	pid_controller_position_x_.setState(current_encoder_data.position_x);
         /*
          *  Set the error differential input (delta e) of the class member
          *  X position (forward/backward) PID controller to be the X
@@ -472,7 +474,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
-
+    	pid_controller_position_x_.setErrorDifferential(current_encoder_data.velocity_x);
         /*
          *  Set the error differential input (delta e) of the class member
          *  Z attitude (yaw) PID controller to be the Z angular velocity in
@@ -480,7 +482,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
-
+    	pid_controller_attitude_z_.setErrorDifferential(current_imu_data.angular_velocity_z);
         /*
          *  Execute the class member X position (forward/backward) PID
          *  controller and store the output into the class member X position
@@ -488,7 +490,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
-
+    	output_position_x_=pid_controller_position_x_.control();
         /*
          *  Execute the class member Z attitude (yaw) open-loop and PID
          *  controllers, multiply the output of the Z attitude (yaw) open-loop
@@ -509,6 +511,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+    	output_attitude_z_=open_loop_controller_attitude_z_.control()*current_encoder_data.velocity_x+pid_controller_attitude_z_.control();
     }
 
     /*
@@ -517,7 +520,7 @@ Controller::control(const bool& fast_domain)
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-
+    double left_motor_output=pid_controller_position_x_+pid_controller_attitude_y_+pid_controller_attitude_z_;
     /*
      *  Produce the right motor output by adding the
      *  class member X position controller output with the
@@ -526,21 +529,25 @@ Controller::control(const bool& fast_domain)
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-
+    double right_motor_output=pid_controller_position_x_+pid_controller_attitude_y_-pid_controller_attitude_z_;
     /*
      *  If the controller is inactive, stop the motors
      *  by setting both the motor outputs to 0.
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-
+    if(!active_)
+    {
+    	left_motor_output=0;
+    	right_motor_output=0;
+    }
     /*
      *  Set the motor enable in the class member actuation
      *  command struct to true, arming the motors.
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-
+    actuation_command_.motor_enable=true;
     /*
      *  Set the motor directions in the class member actuation
      *  command struct to be the sign of the motor output values
@@ -553,7 +560,7 @@ Controller::control(const bool& fast_domain)
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-
+    actuation_command_.motor_left_forward= (left_motor_output>=);
     /*
      *  Using the clamp function from the math header, clamp the
      *  magnitude of the motor output values to be within the
