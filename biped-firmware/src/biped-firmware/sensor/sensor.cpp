@@ -113,7 +113,7 @@ Sensor::getTimeOfFlightData() const
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    return time_of_flight_data_;
+    return time_of_flight_data_; //
 }
 
 void

@@ -32,8 +32,7 @@ IMU::IMU()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-	initialize();
+    initialize();
 }
 
 IMUData
@@ -67,6 +66,10 @@ IMU::read()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    if (!mpu6050_.getEvent(&acceleration, &angular_velocity, &temperature)) {
+        biped::firmware::Serial(LogLevel::error) << "Couldn't get IMU event.";
+        return;
+    }
 
     if (!mpu6050_.getEvent(&acceleration, &angular_velocity, &temperature)) {
     	Serial(LogLevel::error) << "could not read IMU\n";
@@ -126,6 +129,10 @@ IMU::initialize()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    if (!mpu6050_.begin()) {
+        biped::firmware::Serial(LogLevel::error) << "Couldn't initialize IMU driver object.";
+        return;
+    }
 
 	mpu6050_ = Adafruit_MPU6050();
 	if (!mpu6050_.begin(AddressParameter::imu_mpu6050)) {
@@ -143,6 +150,7 @@ IMU::initialize()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    read();
 
     read();
 

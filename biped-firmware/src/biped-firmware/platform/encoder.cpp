@@ -49,6 +49,10 @@ Encoder::Encoder() : steps_left_(0), steps_right_(0)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    pinMode(ESP32Pin::motor_left_encoder_a, INPUT_PULLUP);
+    pinMode(ESP32Pin::motor_left_encoder_b, INPUT_PULLUP);
+    pinMode(ESP32Pin::motor_right_encoder_a, INPUT_PULLUP);
+    pinMode(ESP32Pin::motor_right_encoder_b, INPUT_PULLUP);
 
 	pinMode(ESP32Pin::motor_left_encoder_a, INPUT_PULLUP);
 	pinMode(ESP32Pin::motor_left_encoder_b, INPUT_PULLUP);
@@ -94,11 +98,10 @@ Encoder::read()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-	data_.steps_left = steps_left_;
-	data_.steps_right = steps_right_;
-	data_.steps = (steps_left_ + steps_right_) / 2;
-	data_.position_x = data_.steps / EncoderParameter::steps_per_meter;
+    data_.steps_left = steps_left_;
+    data_.steps_right = steps_right_;
+    data_.steps = (steps_left_+steps_right_)/2;
+    data_.position_x = (data_.steps/EncoderParameter::steps_per_meter);
 }
 
 void
@@ -114,6 +117,7 @@ Encoder::calculateVelocity()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    read();
 
     read();
 
@@ -132,6 +136,9 @@ Encoder::calculateVelocity()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    long meters_since_last = (data_.steps - steps_last)/EncoderParameter::steps_per_meter;
+    data_.velocity_x = low_pass_filter_velocity_x_.filter(meters_since_last/PeriodParameter::slow);
+
 
     long diff = data_.steps - steps_last;
     double diff_m = diff / static_cast<double>(EncoderParameter::steps_per_meter);
@@ -145,7 +152,6 @@ Encoder::calculateVelocity()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
     steps_last = data_.steps;
 }
 
@@ -161,8 +167,7 @@ Encoder::onLeftA()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-	steps_left_ += digitalReadFromISR(ESP32Pin::motor_left_encoder_a);
+    steps_left_ = steps_left_ + digitalReadFromISR(ESP32Pin::motor_left_encoder_a);
 }
 
 void IRAM_ATTR
@@ -177,8 +182,7 @@ Encoder::onLeftB()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-	steps_left_ += digitalReadFromISR(ESP32Pin::motor_left_encoder_b);
+    steps_left_ = steps_left_ - digitalReadFromISR(ESP32Pin::motor_left_encoder_b);
 }
 
 void IRAM_ATTR
@@ -193,8 +197,7 @@ Encoder::onRightA()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-	steps_right_ += digitalReadFromISR(ESP32Pin::motor_right_encoder_a);
+    steps_right_ = steps_right_ - digitalReadFromISR(ESP32Pin::motor_right_encoder_a);
 }
 
 void IRAM_ATTR
@@ -209,8 +212,7 @@ Encoder::onRightB()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-	steps_right_ += digitalReadFromISR(ESP32Pin::motor_right_encoder_b);
+    steps_right_ = steps_right_ + digitalReadFromISR(ESP32Pin::motor_right_encoder_b);
 }
 }   // namespace firmware
 }   // namespace biped
