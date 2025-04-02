@@ -195,9 +195,10 @@ Encoder::onLeftB()
     } else {
         steps_right_ = steps_right_ + 1;
     }
-
+}
 void IRAM_ATTR
 Encoder::onRightA()
+{
     /*
      *  Using the digitalReadFromISR function from the interrupt header, read the
      *  right encoder pins and update the right encoder steps based on the pins read.
