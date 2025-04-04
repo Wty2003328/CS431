@@ -48,7 +48,6 @@ Sensor::Sensor()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
     io_expander_a_->pinModePortA(IOExpanderAPortAPin::time_of_flight_left_shutdown, OUTPUT);
     io_expander_a_->pinModePortB(IOExpanderAPortBPin::time_of_flight_middle_shutdown, OUTPUT);
     io_expander_a_->pinModePortB(IOExpanderAPortBPin::time_of_flight_right_shutdown, OUTPUT);
@@ -69,14 +68,13 @@ Sensor::Sensor()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-    time_of_flight_left_ = std::make_unique<TimeOfFlight>(AddressParameter::time_of_flight_left,
+	time_of_flight_left_ = std::make_unique<TimeOfFlight>(AddressParameter::time_of_flight_left,
                                                           IOExpanderAPortAPin::time_of_flight_left_shutdown,
                                                           io_expander_a_);
-    time_of_flight_middle_ = std::make_unique<TimeOfFlight>(AddressParameter::time_of_flight_middle,
+	time_of_flight_middle_ = std::make_unique<TimeOfFlight>(AddressParameter::time_of_flight_middle,
                                                             (IOExpanderAPortBPin::time_of_flight_middle_shutdown + IOExpanderParameter::port_pin_count),
                                                             io_expander_a_);
-    time_of_flight_right_ = std::make_unique<TimeOfFlight>(AddressParameter::time_of_flight_right,
+	time_of_flight_right_ = std::make_unique<TimeOfFlight>(AddressParameter::time_of_flight_right,
                                                            (IOExpanderAPortBPin::time_of_flight_right_shutdown + IOExpanderParameter::port_pin_count),
                                                            io_expander_a_);
 
@@ -148,7 +146,7 @@ Sensor::sense(const bool& fast_domain)
          *  TODO LAB 6 YOUR CODE HERE.
          */
 
-        encoder_.read();
+    	encoder_.read();
 
         /*
          *  Perform IMU read using the class member IMU object.
@@ -158,7 +156,7 @@ Sensor::sense(const bool& fast_domain)
          *  TODO LAB 6 YOUR CODE HERE.
          */
 
-        imu_.read();
+    	imu_.read();
     }
     else
     {
@@ -170,7 +168,7 @@ Sensor::sense(const bool& fast_domain)
          *  TODO LAB 6 YOUR CODE HERE.
          */
 
-        encoder_.calculateVelocity();
+    	encoder_.calculateVelocity();
 
         /*
          *  Perform time-of-flight reads using the class member
@@ -183,9 +181,9 @@ Sensor::sense(const bool& fast_domain)
          *  TODO LAB 6 YOUR CODE HERE.
          */
 
-        time_of_flight_data_.range_left = time_of_flight_left_->read();
-        time_of_flight_data_.range_middle = time_of_flight_middle_->read();
-        time_of_flight_data_.range_right = time_of_flight_right_->read();
+    	time_of_flight_data_.range_left = time_of_flight_left_->read();
+    	time_of_flight_data_.range_middle = time_of_flight_middle_->read();
+    	time_of_flight_data_.range_right = time_of_flight_right_->read();
 
     }
 }
@@ -202,7 +200,7 @@ Sensor::onEncoderLeftA()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-    encoder_.onLeftA();
+	encoder_.onLeftA();
 }
 
 void IRAM_ATTR
@@ -217,7 +215,7 @@ Sensor::onEncoderLeftB()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-    encoder_.onLeftB();
+	encoder_.onLeftB();
 }
 
 void IRAM_ATTR
@@ -232,7 +230,7 @@ Sensor::onEncoderRightA()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-    encoder_.onRightA();
+	encoder_.onRightA();
 }
 
 void IRAM_ATTR
@@ -247,7 +245,7 @@ Sensor::onEncoderRightB()
      *  TODO LAB 6 YOUR CODE HERE.
      */
 
-    encoder_.onRightB();
+	encoder_.onRightB();
 }
 }   // namespace firmware
 }   // namespace biped

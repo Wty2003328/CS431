@@ -54,6 +54,11 @@ Encoder::Encoder() : steps_left_(0), steps_right_(0)
     pinMode(ESP32Pin::motor_right_encoder_a, INPUT_PULLUP);
     pinMode(ESP32Pin::motor_right_encoder_b, INPUT_PULLUP);
 
+	pinMode(ESP32Pin::motor_left_encoder_a, INPUT_PULLUP);
+	pinMode(ESP32Pin::motor_left_encoder_b, INPUT_PULLUP);
+	pinMode(ESP32Pin::motor_right_encoder_a, INPUT_PULLUP);
+	pinMode(ESP32Pin::motor_right_encoder_b, INPUT_PULLUP);
+
     /*
      *  Configure X velocity low-pass filter.
      */
@@ -97,6 +102,7 @@ Encoder::read()
     data_.steps_right = steps_right_;
     data_.steps = (steps_left_+steps_right_)/2;
     data_.position_x = (data_.steps/EncoderParameter::steps_per_meter);
+
 }
 
 void
@@ -112,6 +118,8 @@ Encoder::calculateVelocity()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    read();
+
     read();
 
     /*
@@ -132,6 +140,12 @@ Encoder::calculateVelocity()
     long meters_since_last = (data_.steps - steps_last)/EncoderParameter::steps_per_meter;
     data_.velocity_x = low_pass_filter_velocity_x_.filter(meters_since_last/PeriodParameter::slow);
 
+
+    long diff = data_.steps - steps_last;
+    double diff_m = diff / static_cast<double>(EncoderParameter::steps_per_meter);
+    double diff_mps = diff_m / PeriodParameter::slow;
+
+    data_.velocity_x = low_pass_filter_velocity_x_.filter(diff_mps);
 
     /*
      *  Update the last overall encoder steps local variable to be the current
@@ -157,9 +171,9 @@ Encoder::onLeftA()
     int a = digitalReadFromISR(ESP32Pin::motor_left_encoder_a);
     int b = digitalReadFromISR(ESP32Pin::motor_left_encoder_b);
     if (b != a) {
-        steps_left_ = steps_left_ - 1;
-    } else {
         steps_left_ = steps_left_ + 1;
+    } else {
+        steps_left_ = steps_left_ - 1;
     }
 }
 
@@ -178,9 +192,9 @@ Encoder::onLeftB()
     int a = digitalReadFromISR(ESP32Pin::motor_left_encoder_a);
     int b = digitalReadFromISR(ESP32Pin::motor_left_encoder_b);
     if (b != a) {
-        steps_left_ = steps_left_ + 1;
-    } else {
         steps_left_ = steps_left_ - 1;
+    } else {
+        steps_left_ = steps_left_ + 1;
     }
 }
 
@@ -199,9 +213,9 @@ Encoder::onRightA()
     int a = digitalReadFromISR(ESP32Pin::motor_right_encoder_a);
     int b = digitalReadFromISR(ESP32Pin::motor_right_encoder_b);
     if (b != a) {
-        steps_right_ = steps_right_ + 1;
-    } else {
         steps_right_ = steps_right_ - 1;
+    } else {
+        steps_right_ = steps_right_ + 1;
     }
 }
 
@@ -220,9 +234,9 @@ Encoder::onRightB()
     int a = digitalReadFromISR(ESP32Pin::motor_right_encoder_a);
     int b = digitalReadFromISR(ESP32Pin::motor_right_encoder_b);
     if (b != a) {
-        steps_right_ = steps_right_ - 1;
-    } else {
         steps_right_ = steps_right_ + 1;
+    } else {
+        steps_right_ = steps_right_ - 1;
     }
 }
 }   // namespace firmware

@@ -187,8 +187,10 @@ setup()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    sensor_=std::make_shared<Sensor>();
-    actuator_=std::make_shared<Actuator>();
+
+    sensor_ = std::make_shared<Sensor>();
+    actuator_ = std::make_shared<Actuator>();
+
     /*
      *  Instantiate the controller object using the C++ STL std::make_shared
      *  function.
@@ -304,10 +306,12 @@ setup()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_left_encoder_a),encoderLeftAInterruptHandler,CHANGE);
-    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_left_encoder_b),encoderLeftBInterruptHandler,CHANGE);
-    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_a),encoderRightAInterruptHandler,CHANGE);
-    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_a),encoderRightBInterruptHandler,CHANGE);
+
+    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_left_encoder_a), encoderLeftAInterruptHandler, CHANGE);
+    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_left_encoder_b), encoderLeftBInterruptHandler, CHANGE);
+    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_a), encoderRightAInterruptHandler, CHANGE);
+    biped::firmware::attachInterrupt(digitalPinToInterrupt(ESP32Pin::motor_right_encoder_b), encoderRightBInterruptHandler, CHANGE);
+
     /*
      *  Using I/O expander global shared pointers and the I/O expander pinModePort
      *  functions, set pin mode for the push button pins. Use pull-up if the pin mode
