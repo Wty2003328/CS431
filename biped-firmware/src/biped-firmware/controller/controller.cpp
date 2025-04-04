@@ -145,7 +145,7 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    controller_parameter_.pid_controller_gain_attitude_y.proportional = 0;
+    controller_parameter_.pid_controller_gain_attitude_y.proportional = 5;
     controller_parameter_.pid_controller_gain_attitude_y.differential = 0;
     controller_parameter_.pid_controller_gain_attitude_y.integral = 0;
     controller_parameter_.pid_controller_gain_attitude_y.integral_max = 0;
@@ -530,7 +530,7 @@ Controller::control(const bool& fast_domain)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
-    	output_attitude_z_=open_loop_controller_attitude_z_.control()*current_encoder_data.velocity_x+pid_controller_attitude_z_.control();
+    	output_attitude_z_=open_loop_controller_attitude_z_.control()*fabs(current_encoder_data.velocity_x)+pid_controller_attitude_z_.control();
     }
 
     /*
@@ -539,7 +539,7 @@ Controller::control(const bool& fast_domain)
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    double left_motor_output=pid_controller_position_x_+pid_controller_attitude_y_+pid_controller_attitude_z_;
+    double left_motor_output= output_position_x_ + output_attitude_y_ + output_attitude_z_;
     /*
      *  Produce the right motor output by adding the
      *  class member X position controller output with the
@@ -548,7 +548,7 @@ Controller::control(const bool& fast_domain)
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    double right_motor_output=pid_controller_position_x_+pid_controller_attitude_y_-pid_controller_attitude_z_;
+    double right_motor_output= output_position_x_ + output_attitude_y_ - output_attitude_z_;
     /*
      *  If the controller is inactive, stop the motors
      *  by setting both the motor outputs to 0.
@@ -579,7 +579,9 @@ Controller::control(const bool& fast_domain)
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    actuation_command_.motor_left_forward= (left_motor_output>=);
+    actuation_command_.motor_left_forward = (left_motor_output >= static_cast<double>(MotorParameter::pwm_min));
+    actuation_command_.motor_right_forward = (right_motor_output >= static_cast<double>(MotorParameter::pwm_min));
+
     /*
      *  Using the clamp function from the math header, clamp the
      *  magnitude of the motor output values to be within the
@@ -601,6 +603,11 @@ Controller::control(const bool& fast_domain)
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    actuation_command_.motor_left_pwm = clamp(fabs(left_motor_output), static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
+    actuation_command_.motor_right_pwm = clamp(fabs(right_motor_output), static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
+
+//    actuation_command_.motor_left_pwm = clamp(20.0, static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
+//    actuation_command_.motor_right_pwm = clamp(20.0, static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
 }
 
 void

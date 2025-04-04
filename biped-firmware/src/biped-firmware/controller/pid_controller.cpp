@@ -235,6 +235,7 @@ PIDController::control()
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
+    double pid_sum = proportional_output+integral_output+differential_output;
 
     /*
      *  Using the clamp function in the math header, return the
@@ -244,7 +245,7 @@ PIDController::control()
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    return clamp(proportional_output+integral_output+differential_output,saturation_.output_lower,saturation_.output_upper);
+    return clamp(pid_sum,saturation_.output_lower,saturation_.output_upper);
 }
 }   // namespace firmware
 }   // namespace biped
