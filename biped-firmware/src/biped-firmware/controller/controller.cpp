@@ -84,7 +84,7 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      */
     controller_parameter_.pid_controller_gain_position_x.proportional = 100;
     controller_parameter_.pid_controller_gain_position_x.differential = 1000;
-    controller_parameter_.pid_controller_gain_position_x.integral = 100;
+    controller_parameter_.pid_controller_gain_position_x.integral = 200;
     controller_parameter_.pid_controller_gain_position_x.integral_max = 1000;
 
     /*
