@@ -82,9 +82,9 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    controller_parameter_.pid_controller_gain_position_x.proportional = 0;
-    controller_parameter_.pid_controller_gain_position_x.differential = 0;
-    controller_parameter_.pid_controller_gain_position_x.integral = 0;
+    controller_parameter_.pid_controller_gain_position_x.proportional = 100;
+    controller_parameter_.pid_controller_gain_position_x.differential = 1000;
+    controller_parameter_.pid_controller_gain_position_x.integral = 50;
     controller_parameter_.pid_controller_gain_position_x.integral_max = 0;
 
     /*
@@ -145,8 +145,8 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    controller_parameter_.pid_controller_gain_attitude_y.proportional = 5;
-    controller_parameter_.pid_controller_gain_attitude_y.differential = 0;
+    controller_parameter_.pid_controller_gain_attitude_y.proportional = -3000;
+    controller_parameter_.pid_controller_gain_attitude_y.differential = -20;
     controller_parameter_.pid_controller_gain_attitude_y.integral = 0;
     controller_parameter_.pid_controller_gain_attitude_y.integral_max = 0;
 
@@ -605,9 +605,6 @@ Controller::control(const bool& fast_domain)
      */
     actuation_command_.motor_left_pwm = clamp(fabs(left_motor_output), static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
     actuation_command_.motor_right_pwm = clamp(fabs(right_motor_output), static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
-
-//    actuation_command_.motor_left_pwm = clamp(20.0, static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
-//    actuation_command_.motor_right_pwm = clamp(20.0, static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
 }
 
 void
