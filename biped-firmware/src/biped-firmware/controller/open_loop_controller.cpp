@@ -89,7 +89,7 @@ OpenLoopController::control()
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    double output = gain_ * firmware::clamp(reference_ , saturation_.input_lower,  saturation_.input_upper);
+    double output = gain_*clamp(reference_, saturation_.input_lower, saturation_.input_upper);
 
     /*
      *  Return the output computed above clamped between the
@@ -99,7 +99,7 @@ OpenLoopController::control()
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    return firmware::clamp(output, saturation_.output_lower, saturation_.output_upper);
+    return clamp(output, saturation_.output_lower, saturation_.output_upper);
 }
 }   // namespace firmware
 }   // namespace biped

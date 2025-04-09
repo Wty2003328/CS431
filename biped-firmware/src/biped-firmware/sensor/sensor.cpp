@@ -48,10 +48,9 @@ Sensor::Sensor()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-	io_expander_a_->pinModePortA(IOExpanderAPortAPin::time_of_flight_left_shutdown, OUTPUT);
-	io_expander_a_->pinModePortB(IOExpanderAPortBPin::time_of_flight_middle_shutdown, OUTPUT);
-	io_expander_a_->pinModePortB(IOExpanderAPortBPin::time_of_flight_right_shutdown, OUTPUT);
+    io_expander_a_->pinModePortA(IOExpanderAPortAPin::time_of_flight_left_shutdown, OUTPUT);
+    io_expander_a_->pinModePortB(IOExpanderAPortBPin::time_of_flight_middle_shutdown, OUTPUT);
+    io_expander_a_->pinModePortB(IOExpanderAPortBPin::time_of_flight_right_shutdown, OUTPUT);
 
     /*
      *  Instantiate the class member time-of-flight objects using the C++ STL
@@ -69,7 +68,6 @@ Sensor::Sensor()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
 	time_of_flight_left_ = std::make_unique<TimeOfFlight>(AddressParameter::time_of_flight_left,
                                                           IOExpanderAPortAPin::time_of_flight_left_shutdown,
                                                           io_expander_a_);
@@ -114,7 +112,7 @@ Sensor::getTimeOfFlightData() const
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    return time_of_flight_data_; //
+    return time_of_flight_data_;
 }
 
 void
@@ -169,7 +167,6 @@ Sensor::sense(const bool& fast_domain)
          *
          *  TODO LAB 6 YOUR CODE HERE.
          */
-        encoder_.calculateVelocity();
 
     	encoder_.calculateVelocity();
 

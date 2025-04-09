@@ -66,13 +66,9 @@ IMU::read()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    if (!mpu6050_.getEvent(&acceleration, &angular_velocity, &temperature)) {
-        biped::firmware::Serial(LogLevel::error) << "Couldn't get IMU event.";
-        return;
-    }
 
     if (!mpu6050_.getEvent(&acceleration, &angular_velocity, &temperature)) {
-    	Serial(LogLevel::error) << "could not read IMU\n";
+        Serial(LogLevel::error) << "could not read IMU\n";
         return;
     }
 
@@ -129,14 +125,10 @@ IMU::initialize()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    if (!mpu6050_.begin()) {
-        biped::firmware::Serial(LogLevel::error) << "Couldn't initialize IMU driver object.";
-        return;
-    }
 
-	mpu6050_ = Adafruit_MPU6050();
-	if (!mpu6050_.begin(AddressParameter::imu_mpu6050)) {
-        Serial(LogLevel::error) << "could not initialize IMU\n";
+    mpu6050_ = Adafruit_MPU6050();
+    if (!mpu6050_.begin(AddressParameter::imu_mpu6050)) {
+        Serial(LogLevel::error) << "Couldn't initialize IMU driver object.";
     }
 
     /*
@@ -150,7 +142,6 @@ IMU::initialize()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-    read();
 
     read();
 
@@ -170,7 +161,7 @@ IMU::initialize()
 
     double ax = mpu6050_data_.acceleration_x;
     double az = mpu6050_data_.acceleration_z;
-    const double attitude_y_raw = atan2(-ax, az);
+    const double attitude_y_raw = -atan2(ax, az);
 
     mpu6050_data_.attitude_y = degreesToRadians(attitude_y_raw);
 
@@ -221,7 +212,7 @@ IMU::calculateAttitude()
 
     double ax = mpu6050_data_.acceleration_x;
     double az = mpu6050_data_.acceleration_z;
-    const double attitude_y_raw = atan2(ax, az);
+    const double attitude_y_raw = -atan2(ax, az);
 
     /*
      *  Filter the raw Y attitude data using the Kalman filter.

@@ -197,7 +197,7 @@ bestEffortTask()
     {
         biped::firmware::Display(5) << "Planner: stage " << planner_stage;
     }
-
+//    biped::firmware::Display(6) << "Waddap";
     // prints state of push button a to OLED
 //    biped::firmware::Display(6) << "A State: " << io_expander_a_->digitalReadPortA(IOExpanderAPortAPin::push_button_a);
 //    biped::firmware::Display(6) << "External State: " << io_expander_b_->digitalReadPortA(0); // demo 4.1: prints state of external button
@@ -536,6 +536,9 @@ realTimeTask(void* pvParameters)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+    	if (controller_) {
+    	    controller_->control(true);
+    	}
 
         /*
          *  Slow domain tasks.
@@ -565,6 +568,9 @@ realTimeTask(void* pvParameters)
              *
              *  TODO LAB 7 YOUR CODE HERE.
              */
+        	if (controller_) {
+        	    controller_->control(false);
+        	}
 
             /*
              *  Reset period domain timer global variable to 0.
@@ -589,6 +595,12 @@ realTimeTask(void* pvParameters)
          *
          *  TODO LAB 7 YOUR CODE HERE.
          */
+        if (controller_) {
+            ActuationCommand a = controller_->getActuationCommand();
+            if (actuator_) {
+                actuator_->actuate(a);
+            }
+        }
 
         /*
          *  Add the fast domain period to the period domain timer global variable.
@@ -710,7 +722,7 @@ udpReadBipedMessageTask(void* pvParameters)
             Serial(LogLevel::warn) << "Failed to deserialize Biped message.";
             continue;
         }
-//        biped::firmware::Serial(biped::firmware::Serial::getLogLevelWorst()) << message_deserialized.controller_parameter.pid_controller_gain_position_x.proportional; // lab 5 demo code
+//        biped::firmware::Serial(biped::firmware::Serial::getLogLevelWorst()) << message_deserialized.controller_parameter.pid_controller_gain_attitude_y.proportional; // lab 5 demo code
 
         /*
          *  If the controller global shared pointer is not a null pointer, using the controller
@@ -723,10 +735,8 @@ udpReadBipedMessageTask(void* pvParameters)
          *  TODO LAB 5 YOUR CODE HERE.
          */
         if (controller_) {
-            ControllerParameter cp;
-            ControllerReference cr;
-            controller_->setControllerParameter(cp);
-            controller_->setControllerReference(cr);
+            controller_->setControllerParameter(message_deserialized.controller_parameter);
+            controller_->setControllerReference(message_deserialized.controller_reference);
         }
     }
 
