@@ -45,7 +45,6 @@ Actuator::Actuator()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
 	pinMode(ESP32Pin::motor_left_pwm, OUTPUT);
 	pinMode(ESP32Pin::motor_right_pwm, OUTPUT);
 
@@ -64,10 +63,9 @@ Actuator::Actuator()
          *
          *  TODO LAB 6 YOUR CODE HERE.
          */
-
-    	io_expander_a_->pinModePortA(IOExpanderAPortAPin::motor_left_direction, OUTPUT);
-    	io_expander_a_->pinModePortA(IOExpanderAPortAPin::motor_right_direction, OUTPUT);
-    	io_expander_a_->pinModePortB(IOExpanderAPortBPin::motor_enable, OUTPUT);
+        io_expander_a_->pinModePortA(IOExpanderAPortAPin::motor_left_direction, OUTPUT);
+        io_expander_a_->pinModePortA(IOExpanderAPortAPin::motor_right_direction, OUTPUT);
+        io_expander_a_->pinModePortB(IOExpanderAPortBPin::motor_enable, OUTPUT);
     }
     else
     {
@@ -95,7 +93,6 @@ Actuator::actuate(const ActuationCommand& actuation_command)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
 	actuation_command_ = actuation_command;
 
     /*
@@ -107,7 +104,6 @@ Actuator::actuate(const ActuationCommand& actuation_command)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
 	io_expander_a_->digitalWritePortB(IOExpanderAPortBPin::motor_enable, actuation_command_.motor_enable);
 
     /*
@@ -122,7 +118,6 @@ Actuator::actuate(const ActuationCommand& actuation_command)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
 	io_expander_a_->digitalWritePortA(IOExpanderAPortAPin::motor_left_direction, !actuation_command_.motor_left_forward);
 	io_expander_a_->digitalWritePortA(IOExpanderAPortAPin::motor_right_direction, actuation_command_.motor_right_forward);
 
@@ -155,7 +150,6 @@ Actuator::actuate(const ActuationCommand& actuation_command)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
 	double clamped_motor_left_pwm = clamp(actuation_command_.motor_left_pwm, static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
 	double clamped_motor_right_pwm = clamp(actuation_command_.motor_right_pwm, static_cast<double>(MotorParameter::pwm_min), static_cast<double>(MotorParameter::pwm_max));
 

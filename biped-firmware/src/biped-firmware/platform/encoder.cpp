@@ -49,11 +49,10 @@ Encoder::Encoder() : steps_left_(0), steps_right_(0)
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-	pinMode(ESP32Pin::motor_left_encoder_a, INPUT_PULLUP);
-	pinMode(ESP32Pin::motor_left_encoder_b, INPUT_PULLUP);
-	pinMode(ESP32Pin::motor_right_encoder_a, INPUT_PULLUP);
-	pinMode(ESP32Pin::motor_right_encoder_b, INPUT_PULLUP);
+    pinMode(ESP32Pin::motor_left_encoder_a, INPUT_PULLUP);
+    pinMode(ESP32Pin::motor_left_encoder_b, INPUT_PULLUP);
+    pinMode(ESP32Pin::motor_right_encoder_a, INPUT_PULLUP);
+    pinMode(ESP32Pin::motor_right_encoder_b, INPUT_PULLUP);
 
     /*
      *  Configure X velocity low-pass filter.
@@ -94,11 +93,11 @@ Encoder::read()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
+    data_.steps_left = steps_left_;
+    data_.steps_right = steps_right_;
+    data_.steps = (steps_left_+steps_right_)/2;
+    data_.position_x = (data_.steps/EncoderParameter::steps_per_meter);
 
-	data_.steps_left = steps_left_;
-	data_.steps_right = steps_right_;
-	data_.steps = (steps_left_ + steps_right_) / 2;
-	data_.position_x = data_.steps / EncoderParameter::steps_per_meter;
 }
 
 void
@@ -114,7 +113,6 @@ Encoder::calculateVelocity()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
     read();
 
     /*
@@ -132,12 +130,8 @@ Encoder::calculateVelocity()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
-    long diff = data_.steps - steps_last;
-    double diff_m = diff / static_cast<double>(EncoderParameter::steps_per_meter);
-    double diff_mps = diff_m / PeriodParameter::slow;
-
-    data_.velocity_x = low_pass_filter_velocity_x_.filter(diff_mps);
+    double meters_since_last = (data_.steps - static_cast<double>(steps_last))/static_cast<double>(EncoderParameter::steps_per_meter);
+    data_.velocity_x = low_pass_filter_velocity_x_.filter(meters_since_last/PeriodParameter::slow);
 
     /*
      *  Update the last overall encoder steps local variable to be the current
@@ -145,7 +139,6 @@ Encoder::calculateVelocity()
      *
      *  TODO LAB 6 YOUR CODE HERE.
      */
-
     steps_last = data_.steps;
 }
 
