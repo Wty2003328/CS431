@@ -226,6 +226,15 @@ bestEffortTask()
      *  TODO LAB 1 YOUR CODE HERE.
      */
     biped::firmware::Display::display();
+
+    // LAB 6 DEMO
+//    struct ActuationCommand lab6;
+//    lab6.motor_enable = 1;
+//    lab6.motor_left_forward = 1;
+//    lab6.motor_right_forward = 1;
+//    lab6.motor_left_pwm = 50;
+//    lab6.motor_right_pwm = 50;
+//    actuator_->actuate(lab6);
 }
 
 void
