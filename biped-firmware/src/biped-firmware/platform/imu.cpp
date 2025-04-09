@@ -164,7 +164,7 @@ IMU::initialize()
     double az = mpu6050_data_.acceleration_z;
     const double attitude_y_raw = -atan2(ax, az);
 
-    mpu6050_data_.attitude_y = degreesToRadians(attitude_y_raw);
+    mpu6050_data_.attitude_y = attitude_y_raw;
 
     /*
      *  Configure the Y attitude (pitch) Kalman filter.
