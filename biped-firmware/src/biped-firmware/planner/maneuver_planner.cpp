@@ -125,6 +125,14 @@ ManeuverPlanner::start()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
+
+	if (plan_completed_) {
+		maneuver_ = maneuver_start_;
+		maneuver_counter_ = 1;
+		maneuver_started_ = false;
+		plan_started_ = false;
+		plan_completed_ = false;
+	}
 }
 
 int
@@ -155,6 +163,9 @@ ManeuverPlanner::plan()
      *  TODO LAB 8 YOUR CODE HERE.
      */
 
+    if (plan_completed_ || !controller_->getActiveStatus())
+    	return -1;
+
     /*
      *  Detect plan completion.
      */
@@ -170,6 +181,11 @@ ManeuverPlanner::plan()
          *
          *  TODO LAB 8 YOUR CODE HERE.
          */
+
+        plan_started_ = false;
+        plan_completed_ = true;
+        return -1;
+
     }
 
     if (!plan_started_)
@@ -210,6 +226,10 @@ ManeuverPlanner::plan()
          *
          *  TODO LAB 8 YOUR CODE HERE.
          */
+
+        controller_->setControllerReference(generateControllerReference());
+        maneuver_timer_ = millis();
+        maneuver_started_ = true;
     }
     else
     {
@@ -238,6 +258,12 @@ ManeuverPlanner::plan()
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
 
+            	if (millis() - maneuver_timer_ > secondsToMilliseconds(maneuver_->transition_value)) {
+            		maneuver_ = maneuver_->next;
+            		maneuver_counter_++;
+            		maneuver_started_ = false;
+            	}
+
                 break;
             }
             case Maneuver::TransitionType::position_x_above:
@@ -255,6 +281,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+
+            	if (sensor_->getEncoderData().position_x > maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+            		maneuver_counter_++;
+            		maneuver_started_ = false;
+            	}
 
                 break;
             }
@@ -274,6 +306,12 @@ ManeuverPlanner::plan()
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
 
+            	if (sensor_->getEncoderData().position_x < maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+            		maneuver_counter_++;
+            		maneuver_started_ = false;
+            	}
+
                 break;
             }
             case Maneuver::TransitionType::range_left_above:
@@ -291,6 +329,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+
+            	if (sensor_->getTimeOfFlightData().range_left > maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+					maneuver_counter_++;
+					maneuver_started_ = false;
+            	}
 
                 break;
             }
@@ -310,6 +354,12 @@ ManeuverPlanner::plan()
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
 
+            	if (sensor_->getTimeOfFlightData().range_left < maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+					maneuver_counter_++;
+					maneuver_started_ = false;
+            	}
+
                 break;
             }
             case Maneuver::TransitionType::range_middle_above:
@@ -327,6 +377,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+
+            	if (sensor_->getTimeOfFlightData().range_middle > maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+					maneuver_counter_++;
+					maneuver_started_ = false;
+            	}
 
                 break;
             }
@@ -346,6 +402,12 @@ ManeuverPlanner::plan()
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
 
+            	if (sensor_->getTimeOfFlightData().range_middle < maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+					maneuver_counter_++;
+					maneuver_started_ = false;
+            	}
+
                 break;
             }
             case Maneuver::TransitionType::range_right_above:
@@ -363,6 +425,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+
+            	if (sensor_->getTimeOfFlightData().range_right > maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+					maneuver_counter_++;
+					maneuver_started_ = false;
+            	}
 
                 break;
             }
@@ -382,6 +450,12 @@ ManeuverPlanner::plan()
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
 
+            	if (sensor_->getTimeOfFlightData().range_right < maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+					maneuver_counter_++;
+					maneuver_started_ = false;
+            	}
+
                 break;
             }
             default:
@@ -400,7 +474,7 @@ ManeuverPlanner::plan()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    return 0;
+    return maneuver_counter_;
 }
 
 ControllerReference
@@ -436,6 +510,8 @@ ManeuverPlanner::generateControllerReference() const
              *  TODO LAB 8 YOUR CODE HERE.
              */
 
+        	controller_reference.position_x = sensor_->getEncoderData().position_x;
+
             break;
         }
         case Maneuver::Type::reverse:
@@ -448,6 +524,9 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+
+        	controller_reference.position_x = sensor_->getEncoderData().position_x - 1000;
+
 
             break;
         }
@@ -470,6 +549,10 @@ ManeuverPlanner::generateControllerReference() const
              *  TODO LAB 8 YOUR CODE HERE.
              */
 
+        	controller_reference.position_x = sensor_->getEncoderData().position_x - 1000;
+        	controller_reference.attitude_z = -degreesToRadians(90);
+
+
             break;
         }
         case Maneuver::Type::reverse_right:
@@ -491,6 +574,9 @@ ManeuverPlanner::generateControllerReference() const
              *  TODO LAB 8 YOUR CODE HERE.
              */
 
+        	controller_reference.position_x = sensor_->getEncoderData().position_x - 1000;
+        	controller_reference.attitude_z = degreesToRadians(90);
+
             break;
         }
         case Maneuver::Type::drive:
@@ -503,6 +589,8 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+
+        	controller_reference.position_x = sensor_->getEncoderData().position_x + 1000;
 
             break;
         }
@@ -521,6 +609,11 @@ ManeuverPlanner::generateControllerReference() const
              *  TODO LAB 8 YOUR CODE HERE.
              */
 
+
+        	controller_reference.position_x = sensor_->getEncoderData().position_x + 1000;
+        	controller_reference.attitude_z = -degreesToRadians(90);
+
+
             break;
         }
         case Maneuver::Type::drive_right:
@@ -537,6 +630,9 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+
+        	controller_reference.position_x = sensor_->getEncoderData().position_x + 1000;
+        	controller_reference.attitude_z = degreesToRadians(90);
 
             break;
         }

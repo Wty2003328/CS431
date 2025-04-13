@@ -184,9 +184,9 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    controller_parameter_.attitude_z_gain_open_loop = 0;
+    controller_parameter_.attitude_z_gain_open_loop = 100;
     controller_parameter_.pid_controller_gain_attitude_z.proportional = 0;
-    controller_parameter_.pid_controller_gain_attitude_z.differential = 0;
+    controller_parameter_.pid_controller_gain_attitude_z.differential = -100;
     controller_parameter_.pid_controller_gain_attitude_z.integral = 0;
     controller_parameter_.pid_controller_gain_attitude_z.integral_max = 0;
 
@@ -223,10 +223,8 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    controller_parameter_.pid_controller_saturation_position_x.input_lower = std::numeric_limits<
-            double>::lowest();
-    controller_parameter_.pid_controller_saturation_position_x.input_upper = std::numeric_limits<
-            double>::max();
+    controller_parameter_.pid_controller_saturation_position_x.input_lower = -1;
+    controller_parameter_.pid_controller_saturation_position_x.input_upper = 1;
 
     /*
      *  Using the setControllerParameter class member function, set the

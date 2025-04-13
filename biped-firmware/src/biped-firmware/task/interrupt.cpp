@@ -319,6 +319,11 @@ pushButtonAInterruptHandler(void* arg)
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
+
+	if (planner_) {
+		planner_->start();
+	}
+
 //    serial_number_++; // demo lab 4
 }
 
