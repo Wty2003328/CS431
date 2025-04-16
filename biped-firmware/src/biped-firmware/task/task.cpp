@@ -181,6 +181,10 @@ bestEffortTask()
         planner_stage = planner_->plan();
     }
 
+    if (planner_) {
+    	planner_stage = planner_->plan();
+    }
+
     /*
      *  If the planner stage local variable is less than 0, using the Display class in the display header,
      *  print to the sixth line of the OLED display the string literal "Planner: inactive".
