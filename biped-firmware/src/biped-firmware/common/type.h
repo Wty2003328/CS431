@@ -357,6 +357,8 @@ struct Maneuver
         duration, //!< Transition after a certain time duration, in seconds.
         position_x_above, //!< Transition if the X position is above a certain value, in meters.
         position_x_below, //!< Transition if the X position is below a certain value, in meters.
+		position_x_above_rel,
+		position_x_below_rel,
         range_left_above, //!< Transition if the left time-of-flight range is above a certain value, in meters.
         range_left_below, //!< Transition if the left time-of-flight range is below a certain value, in meters.
         range_middle_above, //!< Transition if the middle time-of-flight range is above a certain value, in meters.

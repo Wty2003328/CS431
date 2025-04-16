@@ -267,6 +267,7 @@ ManeuverPlanner::plan()
                 break;
             }
             case Maneuver::TransitionType::position_x_above:
+            case Maneuver::TransitionType::position_x_above_rel:
             {
                 /*
                  *  Obtain the encoder data using the sensor global object shared pointer.
@@ -291,6 +292,7 @@ ManeuverPlanner::plan()
                 break;
             }
             case Maneuver::TransitionType::position_x_below:
+            case Maneuver::TransitionType::position_x_below_rel:
             {
                 /*
                  *  Obtain the encoder data using the sensor global object shared pointer.
@@ -492,6 +494,15 @@ ManeuverPlanner::generateControllerReference() const
     {
         Serial(LogLevel::warn) << "Invalid maneuver.";
         return controller_reference;
+    }
+
+    /*
+     * for relative positioning, add current x position to transition value
+     */
+    if (maneuver_->transition_type == Maneuver::TransitionType::position_x_above_rel
+    		|| maneuver_->transition_type == Maneuver::TransitionType::position_x_below_rel)
+    {
+    	maneuver_->transition_value += sensor_->getEncoderData().position_x;
     }
 
     /*
