@@ -82,10 +82,10 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 7 YOUR CODE HERE.
      */
-    controller_parameter_.pid_controller_gain_position_x.proportional = 250;
-    controller_parameter_.pid_controller_gain_position_x.differential = 1750;
-    controller_parameter_.pid_controller_gain_position_x.integral = 30;
-    controller_parameter_.pid_controller_gain_position_x.integral_max = 1250;
+    controller_parameter_.pid_controller_gain_position_x.proportional = 800;
+    controller_parameter_.pid_controller_gain_position_x.differential = 1600;
+    controller_parameter_.pid_controller_gain_position_x.integral = 50;
+    controller_parameter_.pid_controller_gain_position_x.integral_max = 50;
 
     /*
      *  Set entries in the Y attitude (pitch) PID controller gain struct in
@@ -223,8 +223,8 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    controller_parameter_.pid_controller_saturation_position_x.input_lower = -1.0;
-    controller_parameter_.pid_controller_saturation_position_x.input_upper = 1.0;
+    controller_parameter_.pid_controller_saturation_position_x.input_lower = -0.4;
+    controller_parameter_.pid_controller_saturation_position_x.input_upper = 0.2;
 
     /*
      *  Using the setControllerParameter class member function, set the
