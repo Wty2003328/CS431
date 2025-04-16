@@ -83,9 +83,9 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *  TODO LAB 7 YOUR CODE HERE.
      */
     controller_parameter_.pid_controller_gain_position_x.proportional = 250;
-    controller_parameter_.pid_controller_gain_position_x.differential = 1500;
-    controller_parameter_.pid_controller_gain_position_x.integral = 100;
-    controller_parameter_.pid_controller_gain_position_x.integral_max = 1000;
+    controller_parameter_.pid_controller_gain_position_x.differential = 1750;
+    controller_parameter_.pid_controller_gain_position_x.integral = 30;
+    controller_parameter_.pid_controller_gain_position_x.integral_max = 1250;
 
     /*
      *  Set entries in the Y attitude (pitch) PID controller gain struct in
@@ -184,9 +184,9 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    controller_parameter_.attitude_z_gain_open_loop = 100;
+    controller_parameter_.attitude_z_gain_open_loop = 160;
     controller_parameter_.pid_controller_gain_attitude_z.proportional = 0;
-    controller_parameter_.pid_controller_gain_attitude_z.differential = -100;
+    controller_parameter_.pid_controller_gain_attitude_z.differential = -150;
     controller_parameter_.pid_controller_gain_attitude_z.integral = 0;
     controller_parameter_.pid_controller_gain_attitude_z.integral_max = 0;
 
@@ -223,8 +223,8 @@ Controller::Controller() : active_(false), output_position_x_(0), output_attitud
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    controller_parameter_.pid_controller_saturation_position_x.input_lower = -1;
-    controller_parameter_.pid_controller_saturation_position_x.input_upper = 1;
+    controller_parameter_.pid_controller_saturation_position_x.input_lower = -1.0;
+    controller_parameter_.pid_controller_saturation_position_x.input_upper = 1.0;
 
     /*
      *  Using the setControllerParameter class member function, set the
