@@ -229,6 +229,8 @@ setup()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
+    planner_ = std::make_shared<WaypointPlanner>();
+//    planner_ = std::make_shared<ManeuverPlanner>();
 
     /*
      *  Create I/O expander interrupt service tasks using the FreeRTOS

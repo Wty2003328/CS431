@@ -125,6 +125,13 @@ ManeuverPlanner::start()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
+    if (plan_completed_) {
+        maneuver_ = maneuver_start_;
+        maneuver_counter_ = 1;
+        maneuver_started_ = false;
+        plan_started_ = false;
+        plan_completed_ = false;
+    }
 }
 
 int
@@ -154,6 +161,9 @@ ManeuverPlanner::plan()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
+    if (plan_completed_ || !controller_->getActiveStatus()) {
+        return -1;
+    }
 
     /*
      *  Detect plan completion.
@@ -170,6 +180,9 @@ ManeuverPlanner::plan()
          *
          *  TODO LAB 8 YOUR CODE HERE.
          */
+        plan_started_ = false;
+        plan_completed_ = true;
+        return -1;
     }
 
     if (!plan_started_)
@@ -210,6 +223,9 @@ ManeuverPlanner::plan()
          *
          *  TODO LAB 8 YOUR CODE HERE.
          */
+        controller_->setControllerReference(generateControllerReference());
+        maneuver_timer_ = millis();
+        maneuver_started_ = true;
     }
     else
     {
@@ -237,6 +253,11 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                if (static_cast<double>(millis()-maneuver_timer_) > secondsToMilliseconds(maneuver_->transition_value)) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -255,6 +276,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                EncoderData encoder_data = sensor_->getEncoderData();
+                if (encoder_data.position_x > maneuver_->transition_value) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -273,6 +300,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                EncoderData encoder_data = sensor_->getEncoderData();
+                if (encoder_data.position_x < maneuver_->transition_value) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -291,6 +324,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                TimeOfFlightData tof_data = sensor_->getTimeOfFlightData();
+                if (tof_data.range_left > maneuver_->transition_value) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -309,6 +348,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                TimeOfFlightData tof_data = sensor_->getTimeOfFlightData();
+                if (tof_data.range_left < maneuver_->transition_value) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -327,6 +372,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                TimeOfFlightData tof_data = sensor_->getTimeOfFlightData();
+                if (tof_data.range_middle > maneuver_->transition_value) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -345,6 +396,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                TimeOfFlightData tof_data = sensor_->getTimeOfFlightData();
+                if (tof_data.range_middle < maneuver_->transition_value) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -363,6 +420,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                TimeOfFlightData tof_data = sensor_->getTimeOfFlightData();
+                if (tof_data.range_right > maneuver_->transition_value) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -381,6 +444,12 @@ ManeuverPlanner::plan()
                  *
                  *  TODO LAB 8 YOUR CODE HERE.
                  */
+                TimeOfFlightData tof_data = sensor_->getTimeOfFlightData();
+                if (tof_data.range_right < maneuver_->transition_value) {
+                    maneuver_ = maneuver_->next;
+                    maneuver_counter_++;
+                    maneuver_started_ = false;
+                }
 
                 break;
             }
@@ -400,7 +469,7 @@ ManeuverPlanner::plan()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    return 0;
+    return maneuver_counter_;
 }
 
 ControllerReference
@@ -435,6 +504,8 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+            EncoderData edata = sensor_->getEncoderData();
+            controller_reference.position_x = edata.position_x;
 
             break;
         }
@@ -448,6 +519,8 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+            EncoderData edata = sensor_->getEncoderData();
+            controller_reference.position_x = edata.position_x-1000;
 
             break;
         }
@@ -469,6 +542,9 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+            EncoderData edata = sensor_->getEncoderData();
+            controller_reference.position_x = edata.position_x-1000;
+            controller_reference.attitude_z = degreesToRadians(-90);
 
             break;
         }
@@ -490,6 +566,9 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+            EncoderData edata = sensor_->getEncoderData();
+            controller_reference.position_x = edata.position_x-1000;
+            controller_reference.attitude_z = degreesToRadians(90);
 
             break;
         }
@@ -503,6 +582,8 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+            EncoderData edata = sensor_->getEncoderData();
+            controller_reference.position_x = edata.position_x+1000;
 
             break;
         }
@@ -520,6 +601,9 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+            EncoderData edata = sensor_->getEncoderData();
+            controller_reference.position_x = edata.position_x+1000;
+            controller_reference.attitude_z = degreesToRadians(-90);
 
             break;
         }
@@ -537,6 +621,9 @@ ManeuverPlanner::generateControllerReference() const
              *
              *  TODO LAB 8 YOUR CODE HERE.
              */
+            EncoderData edata = sensor_->getEncoderData();
+            controller_reference.position_x = edata.position_x+1000;
+            controller_reference.attitude_z = degreesToRadians(90);
 
             break;
         }

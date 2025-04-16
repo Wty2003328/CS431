@@ -125,6 +125,13 @@ WaypointPlanner::start()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
+    if (plan_completed_) {
+        waypoint_ = waypoint_start_;
+        waypoint_counter_ = 1;
+        waypoint_started_ = false;
+        plan_started_ = false;
+        plan_completed_ = false;
+    }
 }
 
 int
@@ -145,6 +152,9 @@ WaypointPlanner::plan()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
+    if (plan_completed_ || !controller_->getActiveStatus()) {
+        return -1;
+    }
 
     /*
      *  Detect plan completion.
@@ -161,6 +171,9 @@ WaypointPlanner::plan()
          *
          *  TODO LAB 8 YOUR CODE HERE.
          */
+        plan_started_ = false;
+        plan_completed_ = true;
+        return -1;
     }
 
     if (!plan_started_)
@@ -183,6 +196,7 @@ WaypointPlanner::plan()
          *
          *  TODO LAB 8 YOUR CODE HERE.
          */
+        plan_started_ = true;
     }
 
     if (!waypoint_started_)
@@ -201,6 +215,9 @@ WaypointPlanner::plan()
          *
          *  TODO LAB 8 YOUR CODE HERE.
          */
+        controller_->setControllerReference(waypoint_->controller_reference);
+        waypoint_timer_ = millis();
+        waypoint_started_ = true;
     }
     else
     {
@@ -220,6 +237,11 @@ WaypointPlanner::plan()
          *
          *  TODO LAB 8 YOUR CODE HERE.
          */
+        if (static_cast<double>(millis() - waypoint_timer_) > secondsToMilliseconds(waypoint_->duration)) {
+            waypoint_ = waypoint_->next;
+            waypoint_counter_++;
+            waypoint_started_ = false;
+        }
     }
 
     /*
@@ -227,7 +249,7 @@ WaypointPlanner::plan()
      *
      *  TODO LAB 8 YOUR CODE HERE.
      */
-    return 0;
+    return waypoint_counter_;
 }
 }   // namespace firmware
 }   // namespace biped
