@@ -354,11 +354,12 @@ struct Maneuver
      */
     enum class TransitionType
     {
-        duration, //!< Transition after a certain time duration, in seconds.
+    	position_x_above_rel,
+		position_x_below_rel,
+		park_range,
+    	duration, //!< Transition after a certain time duration, in seconds.
         position_x_above, //!< Transition if the X position is above a certain value, in meters.
         position_x_below, //!< Transition if the X position is below a certain value, in meters.
-		position_x_above_rel,
-		position_x_below_rel,
         range_left_above, //!< Transition if the left time-of-flight range is above a certain value, in meters.
         range_left_below, //!< Transition if the left time-of-flight range is below a certain value, in meters.
         range_middle_above, //!< Transition if the middle time-of-flight range is above a certain value, in meters.
@@ -369,16 +370,18 @@ struct Maneuver
 
     TransitionType transition_type; //!< Maneuver transition type.
     double transition_value; //!< Maneuver transition value, the meaning of which depends on the maneuver transition type.
+    double transition_value_2;
     Type type;  //!< Maneuver type.
     std::shared_ptr<Maneuver> next; //!< Shared pointer to the next maneuver.
+    std::shared_ptr<Maneuver> next_2;
 
     /**
      *  @brief  Planner maneuver struct constructor
      *
      *  This constructor initializes all planner maneuver struct entries.
      */
-    Maneuver() : transition_type(TransitionType::duration), transition_value(0), type(Type::park),
-            next(nullptr)
+    Maneuver() : transition_type(TransitionType::duration), transition_value(0), transition_value_2(0), type(Type::park),
+            next(nullptr), next_2(nullptr)
     {
     }
 };

@@ -112,6 +112,46 @@ WaypointPlanner::WaypointPlanner() : waypoint_counter_(1), waypoint_timer_(0), p
      *
      *  TODO LAB 9 YOUR CODE HERE.
      */
+
+    auto way1 = std::make_shared<Waypoint>();
+    auto way2 = std::make_shared<Waypoint>();
+    auto way3 = std::make_shared<Waypoint>();
+    auto way4 = std::make_shared<Waypoint>();
+    auto way5 = std::make_shared<Waypoint>();
+    auto way6 = std::make_shared<Waypoint>();
+
+    waypoint_start_ = way1;
+    waypoint_ = waypoint_start_;
+
+    way1->controller_reference.attitude_z = 0;
+    way1->controller_reference.position_x = 0;
+    way1->duration = 2;
+    way1->next = way2;
+
+    way2->controller_reference.attitude_z = degreesToRadians(-122);
+    way2->controller_reference.position_x = 1;
+    way2->duration = 5;
+    way2->next = way3;
+
+    way3->controller_reference.attitude_z = degreesToRadians(-10);
+	way3->controller_reference.position_x = 3;
+	way3->duration = 10;
+	way3->next = way4;
+
+    way4->controller_reference.attitude_z = degreesToRadians(128);
+	way4->controller_reference.position_x = 2;
+	way4->duration = 4;
+	way4->next = way5;
+
+    way5->controller_reference.attitude_z = degreesToRadians(0);
+	way5->controller_reference.position_x = 1.5;
+	way5->duration = 2;
+	way5->next = way6;
+
+	way6->controller_reference.attitude_z = degreesToRadians(0);
+	way6->controller_reference.position_x = 2.5;
+	way6->duration = 2;
+	way6->next = nullptr;
 }
 
 void IRAM_ATTR

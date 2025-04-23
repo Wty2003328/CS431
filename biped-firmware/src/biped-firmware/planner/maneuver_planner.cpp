@@ -112,6 +112,33 @@ ManeuverPlanner::ManeuverPlanner() : maneuver_counter_(1), maneuver_timer_(0), p
      *
      *  TODO LAB 9 YOUR CODE HERE.
      */
+
+    auto man1 = std::make_shared<Maneuver>();
+    auto man2 = std::make_shared<Maneuver>();
+    auto man3 = std::make_shared<Maneuver>();
+
+    auto range_upper = 0.75;
+    auto range_lower = 0.25;
+
+    maneuver_start_ = man1;
+    maneuver_ = maneuver_start_;
+
+    man1->transition_type = Maneuver::TransitionType::park_range;
+    man1->transition_value = range_upper;
+    man1->transition_value_2 = range_lower;
+    man1->type = Maneuver::Type::park;
+    man1->next = man2;
+    man1->next_2 = man3;
+
+    man2->transition_type = Maneuver::TransitionType::range_middle_below;
+    man2->transition_value = range_upper;
+    man2->type = Maneuver::Type::drive;
+    man2->next = man1;
+
+    man3->transition_type = Maneuver::TransitionType::range_middle_above;
+	man3->transition_value = range_lower;
+	man3->type = Maneuver::Type::reverse;
+	man3->next = man1;
 }
 
 void IRAM_ATTR
@@ -239,6 +266,22 @@ ManeuverPlanner::plan()
          */
         switch (maneuver_->transition_type)
         {
+        	case Maneuver::TransitionType::park_range:
+        	{
+        		auto range_middle = sensor_->getTimeOfFlightData().range_middle;
+
+        		if (range_middle > maneuver_->transition_value) {
+            		maneuver_ = maneuver_->next;
+            		maneuver_counter_++;
+            		maneuver_started_ = false;
+        		} else if (range_middle < maneuver_->transition_value_2) {
+            		maneuver_ = maneuver_->next_2;
+            		maneuver_counter_++;
+            		maneuver_started_ = false;
+        		}
+
+        		break;
+        	}
             case Maneuver::TransitionType::duration:
             {
                 /*
