@@ -113,32 +113,105 @@ ManeuverPlanner::ManeuverPlanner() : maneuver_counter_(1), maneuver_timer_(0), p
      *  TODO LAB 9 YOUR CODE HERE.
      */
 
-    auto man1 = std::make_shared<Maneuver>();
-    auto man2 = std::make_shared<Maneuver>();
-    auto man3 = std::make_shared<Maneuver>();
+//    auto man1 = std::make_shared<Maneuver>();
+//    auto man2 = std::make_shared<Maneuver>();
+//    auto man3 = std::make_shared<Maneuver>();
+//
+//    auto range_upper = 0.75;
+//    auto range_lower = 0.25;
+//
+//    maneuver_start_ = man1;
+//    maneuver_ = maneuver_start_;
+//
+//    man1->transition_type = Maneuver::TransitionType::park_range;
+//    man1->transition_value = range_upper;
+//    man1->transition_value_2 = range_lower;
+//    man1->type = Maneuver::Type::park;
+//    man1->next = man2;
+//    man1->next_2 = man3;
+//
+//    man2->transition_type = Maneuver::TransitionType::range_middle_below;
+//    man2->transition_value = range_upper;
+//    man2->type = Maneuver::Type::drive;
+//    man2->next = man1;
+//
+//    man3->transition_type = Maneuver::TransitionType::range_middle_above;
+//	man3->transition_value = range_lower;
+//	man3->type = Maneuver::Type::reverse;
+//	man3->next = man1;
 
-    auto range_upper = 0.75;
-    auto range_lower = 0.25;
+	auto man1 = std::make_shared<Maneuver>();
+	auto man2 = std::make_shared<Maneuver>();
+	auto man3 = std::make_shared<Maneuver>();
+	auto man4 = std::make_shared<Maneuver>();
+	auto man5 = std::make_shared<Maneuver>();
 
-    maneuver_start_ = man1;
-    maneuver_ = maneuver_start_;
+	maneuver_start_ = man1;
+	maneuver_ = maneuver_start_;
 
-    man1->transition_type = Maneuver::TransitionType::park_range;
-    man1->transition_value = range_upper;
-    man1->transition_value_2 = range_lower;
-    man1->type = Maneuver::Type::park;
-    man1->next = man2;
-    man1->next_2 = man3;
+	auto range_forward = 0.75;
+	auto range_backwards = 0.25;
+	auto range_left_right = 2;
 
-    man2->transition_type = Maneuver::TransitionType::range_middle_below;
-    man2->transition_value = range_upper;
-    man2->type = Maneuver::Type::drive;
-    man2->next = man1;
+	// park
+	man1->transition_type = Maneuver::TransitionType::follow;
+	man1->transition_value_vector[0] = range_forward;
+	man1->transition_value_vector[1] = range_backwards;
+	man1->transition_value_vector[2] = range_left_right;
+	man1->type = Maneuver::Type::park;
+	man1->next_vector[0] = man1;
+	man1->next_vector[1] = man2;
+	man1->next_vector[2] = man3;
+	man1->next_vector[3] = man4;
+	man1->next_vector[4] = man5;
 
-    man3->transition_type = Maneuver::TransitionType::range_middle_above;
-	man3->transition_value = range_lower;
+	// drive
+	man2->transition_type = Maneuver::TransitionType::follow;
+	man2->transition_value_vector[0] = range_forward;
+	man2->transition_value_vector[1] = range_backwards;
+	man2->transition_value_vector[2] = range_left_right;
+	man2->type = Maneuver::Type::drive;
+	man2->next_vector[0] = man1;
+	man2->next_vector[1] = man2;
+	man2->next_vector[2] = man3;
+	man2->next_vector[3] = man4;
+	man2->next_vector[4] = man5;
+
+	// reverse
+	man3->transition_type = Maneuver::TransitionType::follow;
+	man3->transition_value_vector[0] = range_forward;
+	man3->transition_value_vector[1] = range_backwards;
+	man3->transition_value_vector[2] = range_left_right;
 	man3->type = Maneuver::Type::reverse;
-	man3->next = man1;
+	man3->next_vector[0] = man1;
+	man3->next_vector[1] = man2;
+	man3->next_vector[2] = man3;
+	man3->next_vector[3] = man4;
+	man3->next_vector[4] = man5;
+
+	// turn right towards object
+	man4->transition_type = Maneuver::TransitionType::follow;
+	man4->transition_value_vector[0] = range_forward;
+	man4->transition_value_vector[1] = range_backwards;
+	man4->transition_value_vector[2] = range_left_right;
+	man4->type = Maneuver::Type::drive_right;
+	man4->next_vector[0] = man1;
+	man4->next_vector[1] = man2;
+	man4->next_vector[2] = man3;
+	man4->next_vector[3] = man4;
+	man4->next_vector[4] = man5;
+
+	// turn left towards object
+	man5->transition_type = Maneuver::TransitionType::follow;
+	man5->transition_value_vector[0] = range_forward;
+	man5->transition_value_vector[1] = range_backwards;
+	man5->transition_value_vector[2] = range_left_right;
+	man5->type = Maneuver::Type::drive_left;
+	man5->next_vector[0] = man1;
+	man5->next_vector[1] = man2;
+	man5->next_vector[2] = man3;
+	man5->next_vector[3] = man4;
+	man5->next_vector[4] = man5;
 }
 
 void IRAM_ATTR
@@ -266,6 +339,51 @@ ManeuverPlanner::plan()
          */
         switch (maneuver_->transition_type)
         {
+        	case Maneuver::TransitionType::follow:
+        	{
+        		// transitons values: [forward middle, back middle, left/right value]
+        		// next values: [park, drive, reverse, turn right, turn left]
+        		auto range_middle = sensor_->getTimeOfFlightData().range_middle;
+        		auto range_left = sensor_->getTimeOfFlightData().range_left;
+        		auto range_right = sensor_->getTimeOfFlightData().range_right;
+        		auto MAX = 100;
+
+        		auto upper = maneuver_->transition_value_vector[0];
+        		auto lower = maneuver_->transition_value_vector[1];
+        		auto angled = maneuver_->transition_value_vector[2];
+
+        		auto park_next = maneuver_->next_vector[0];
+        		auto drive_next = maneuver_->next_vector[1];
+        		auto reverse_next = maneuver_->next_vector[2];
+        		auto right_next = maneuver_->next_vector[3];
+        		auto left_next = maneuver_->next_vector[4];
+
+        		if (range_middle < MAX) {
+        			if (range_middle < upper && range_middle > lower && maneuver_->type != Maneuver::Type::park) {
+						maneuver_ = park_next;
+						maneuver_counter_++;
+						maneuver_started_ = false;
+					} else if (range_middle > upper && maneuver_->type != Maneuver::Type::drive) {
+						maneuver_ = drive_next;
+						maneuver_counter_++;
+						maneuver_started_ = false;
+					} else if (range_middle < lower && maneuver_->type != Maneuver::Type::reverse) {
+						maneuver_ = reverse_next;
+						maneuver_counter_++;
+						maneuver_started_ = false;
+					}
+        		} else if (range_right < angled && maneuver_->type != Maneuver::Type::drive_right) {
+        			maneuver_ = right_next;
+					maneuver_counter_++;
+					maneuver_started_ = false;
+        		} else if (range_left < angled && maneuver_->type != Maneuver::Type::drive_left) {
+        			maneuver_ = left_next;
+					maneuver_counter_++;
+					maneuver_started_ = false;
+        		}
+        		break;
+			}
+
         	case Maneuver::TransitionType::park_range:
         	{
         		auto range_middle = sensor_->getTimeOfFlightData().range_middle;

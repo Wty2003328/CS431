@@ -357,6 +357,7 @@ struct Maneuver
     	position_x_above_rel,
 		position_x_below_rel,
 		park_range,
+		follow,
     	duration, //!< Transition after a certain time duration, in seconds.
         position_x_above, //!< Transition if the X position is above a certain value, in meters.
         position_x_below, //!< Transition if the X position is below a certain value, in meters.
@@ -371,9 +372,11 @@ struct Maneuver
     TransitionType transition_type; //!< Maneuver transition type.
     double transition_value; //!< Maneuver transition value, the meaning of which depends on the maneuver transition type.
     double transition_value_2;
+    double transition_value_vector[3];
     Type type;  //!< Maneuver type.
     std::shared_ptr<Maneuver> next; //!< Shared pointer to the next maneuver.
     std::shared_ptr<Maneuver> next_2;
+    std::shared_ptr<Maneuver> next_vector[5];
 
     /**
      *  @brief  Planner maneuver struct constructor
