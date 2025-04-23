@@ -146,12 +146,7 @@ WaypointPlanner::WaypointPlanner() : waypoint_counter_(1), waypoint_timer_(0), p
     way5->controller_reference.attitude_z = degreesToRadians(0);
 	way5->controller_reference.position_x = 1.5;
 	way5->duration = 2;
-	way5->next = way6;
-
-	way6->controller_reference.attitude_z = degreesToRadians(0);
-	way6->controller_reference.position_x = 2.5;
-	way6->duration = 2;
-	way6->next = nullptr;
+	way5->next = nullptr;
 }
 
 void IRAM_ATTR
